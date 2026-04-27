@@ -15,6 +15,7 @@ app.get("/",(req,res)=>{
 
 app.use("/auth",authRoutes)
 
+
 const startServer = async() =>{
     await connectDB()
     const PORT = process.env.PORT;
