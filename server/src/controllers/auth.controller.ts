@@ -59,7 +59,7 @@ export const login = async (req: Request, res: Response) => {
     if (!isMatch) {
       return res.status(401).json({ error: "Invalid credentials" });
     }
-    const token = jwt.sign({ id: dbUser.id }, process.env.JWT_SECRET!, {
+    const token = jwt.sign({ id: dbUser.id }, process.env.JWT_SECRET, {
       expiresIn: "1d",
     });
     return res.status(200).json({
