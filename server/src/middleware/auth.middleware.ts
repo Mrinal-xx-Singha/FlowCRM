@@ -12,11 +12,14 @@ const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
     return res.status(401).json({ message: "Not Authorized" });
   }
   try {
-    let decoded = jwt.verify(token,process.env.JWT_SECRET)
-    req.user = decoded
-    next();
+    const decoded = jwt.verify(token,process.env.JWT_SECRET as string)
+    if(typeof decoded === "object" && decoded !== null && "id" in decoded && typeof decoded.id === "number"){
+
+      req.user = {id:decoded.id}
+      return next();
+    }
   } catch (error) {
-    return res.status(401).json({ error: "Invalid Credentails" });
+    return res.status(401).json({ error: "Invalid credentials" });
   }
 };
 
