@@ -12,10 +12,14 @@ const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
     return res.status(401).json({ message: "Not Authorized" });
   }
   try {
-    const decoded = jwt.verify(token,process.env.JWT_SECRET as string)
-    if(typeof decoded === "object" && decoded !== null && "id" in decoded && typeof decoded.id === "number"){
-
-      req.user = {id:decoded.id}
+    const decoded = jwt.verify(token, process.env.JWT_SECRET as string);
+    if (
+      typeof decoded === "object" &&
+      decoded !== null &&
+      "id" in decoded &&
+      typeof decoded.id === "number"
+    ) {
+      req.user = { id: decoded.id };
       return next();
     }
   } catch (error) {
