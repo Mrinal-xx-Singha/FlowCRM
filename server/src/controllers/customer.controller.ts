@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { pool } from "../db/db";
+import { pool } from "../db/dbConnect";
 
 export const createCustomer = async (req: Request, res: Response) => {
   try {
