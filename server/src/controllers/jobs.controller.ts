@@ -132,8 +132,8 @@ export const updateJob = async (req: Request, res: Response) => {
     return res.status(400).json({ message: "Invalid job id" });
   }
 
-  if(title !== undefined && !title.trim()){
-    return res.status(400).json({message:"Title cannot be empty"})
+  if (title !== undefined && !title.trim()) {
+    return res.status(400).json({ message: "Title cannot be empty" });
   }
 
   const allowedStatus = ["pending", "in_progress", "completed"];
@@ -151,8 +151,8 @@ export const updateJob = async (req: Request, res: Response) => {
   if (status !== undefined && !allowedStatus.includes(status)) {
     return res.status(400).json({ message: "Invalid status type" });
   }
-  if (due_date !== undefined && typeof due_date !== "string") {
-    return res.status(400).json({ message: "Due date must be a string" });
+  if (due_date !== undefined && typeof Number.isNaN(Date.parse(due_date))) {
+    return res.status(400).json({ message: "Invalid date format" });
   }
   let trimmedTitle = title ? title.trim() : null;
   let trimmedDescription = description ? description.trim() : null;
@@ -191,6 +191,32 @@ export const updateJob = async (req: Request, res: Response) => {
     }
 
     return res.status(200).json({ job: result.rows[0] });
+  } catch (error) {
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const deleteJob = async (req: Request, res: Response) => {
+  const userId = req.user?.id;
+  const jobId = Number(req.params.id);
+
+  if (!userId) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+  if (Number.isNaN(jobId) || jobId <= 0) {
+    return res.status(400).json({ message: "Invalid job id" });
+  }
+
+  try {
+    const jobQuery = "DELETE FROM jobs WHERE id=$1 AND user_id=$2 RETURNING *";
+    const jobValues = [jobId, userId];
+
+    const result = await pool.query(jobQuery, jobValues);
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: "Job not found" });
+    }
+
+    return res.status(200).json({ message: "Job deleted successfully" });
   } catch (error) {
     return res.status(500).json({ message: "Internal server error" });
   }
