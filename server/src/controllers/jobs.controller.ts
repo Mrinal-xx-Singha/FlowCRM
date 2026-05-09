@@ -132,14 +132,18 @@ export const updateJob = async (req: Request, res: Response) => {
     return res.status(400).json({ message: "Invalid job id" });
   }
 
-  if (title !== undefined && !title.trim()) {
-    return res.status(400).json({ message: "Title cannot be empty" });
-  }
-
   const allowedStatus = ["pending", "in_progress", "completed"];
 
   if (title !== undefined && typeof title !== "string") {
     return res.status(400).json({ message: "Title must be a string" });
+  }
+
+  if (due_date !== undefined && typeof due_date !== "string") {
+    return res.status(400).json({ message: "Due date must be a string" });
+  }
+
+  if (title !== undefined && !title.trim()) {
+    return res.status(400).json({ message: "Title cannot be empty" });
   }
 
   if (description !== undefined) {
@@ -151,7 +155,7 @@ export const updateJob = async (req: Request, res: Response) => {
   if (status !== undefined && !allowedStatus.includes(status)) {
     return res.status(400).json({ message: "Invalid status type" });
   }
-  if (due_date !== undefined && typeof Number.isNaN(Date.parse(due_date))) {
+  if (due_date !== undefined && Number.isNaN(Date.parse(due_date))) {
     return res.status(400).json({ message: "Invalid date format" });
   }
   let trimmedTitle = title ? title.trim() : null;
