@@ -155,3 +155,69 @@ export const createReminder = async (req: Request, res: Response) => {
     });
   }
 };
+
+export const getReminders = async (req: Request, res: Response) => {
+  const userId = req.user?.id;
+  const status =
+    typeof req.query.status === "string" ? req.query.status : undefined;
+
+  const upcoming = req.query.upcoming === "true";
+
+  const allowedStatus = ["pending", "sent"];
+
+  if (!userId) {
+    return res.status(401).json({
+      message: "Unauthorized",
+    });
+  }
+
+  // Validate status filter
+  if (status !== undefined && !allowedStatus.includes(String(status))) {
+    return res.status(400).json({
+      message: "Invalid status filter",
+    });
+  }
+
+  try {
+    const conditions: string[] = ["reminders.user_id = $1"];
+    const values: (string | number)[] = [userId];
+    let paramIndex = 2;
+    //  Status filter
+    if (status !== undefined) {
+      conditions.push(`reminders.status = $${paramIndex}`);
+      values.push(status);
+      paramIndex++;
+    }
+
+    // Upcoming filter
+    if (upcoming) {
+      conditions.push(`reminders.remind_at > NOW()`);
+    }
+
+    const whereClause =
+      conditions.length > 0 ? `WHERE ${conditions.join(" AND ")}` : "";
+
+    const query = `
+      SELECT 
+        reminders.*,
+        customers.name AS customer_name,
+        jobs.title AS job_title
+      FROM reminders
+      LEFT JOIN customers ON reminders.customer_id = customers.id
+      LEFT JOIN jobs ON reminders.job_id = jobs.id
+      ${whereClause}
+      ORDER BY reminders.remind_at ASC
+    `;
+
+    const result = await pool.query(query, values);
+
+    return res.status(200).json({
+      reminders: result.rows,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      message: "Internal server error",
+    });
+  }
+};
