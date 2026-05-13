@@ -1,9 +1,14 @@
 import express from "express";
-import { createReminder,getReminders } from "../controllers/reminder.controller";
+import {
+  createReminder,
+  getReminders,
+  getReminderById,
+} from "../controllers/reminder.controller";
 
-const router = express.Router()
+const router = express.Router();
 
-router.post("/reminders",createReminder)
-router.get("/reminders",getReminders)
+router.post("/reminders", createReminder);
+router.get("/reminders", getReminders);
+router.get("/reminders/:id", getReminderById);
 
 export default router;

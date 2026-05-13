@@ -105,6 +105,7 @@ export const createReminder = async (req: Request, res: Response) => {
     }
 
     // verify job ownership
+
     if (jobId !== null) {
       const jobQuery = "SELECT id FROM jobs WHERE id = $1 AND user_id = $2";
 
@@ -156,6 +157,7 @@ export const createReminder = async (req: Request, res: Response) => {
   }
 };
 
+// Get reminders with optional filters for status and upcoming reminders
 export const getReminders = async (req: Request, res: Response) => {
   const userId = req.user?.id;
   const status =
@@ -221,3 +223,40 @@ export const getReminders = async (req: Request, res: Response) => {
     });
   }
 };
+
+// Get a single reminder by ID
+export const getReminderById = async (req: Request, res: Response) => {
+  const userId = req.user?.id;
+  const reminderId = Number(req.params.id);
+
+  if (!userId) {
+    return res.status(401).json({
+      message: "Unauthorized",
+    });
+  }
+
+  if (Number.isNaN(reminderId) || reminderId <= 0) {
+    return res.status(400).json({
+      message: "Invalid reminder id",
+    });
+  }
+  try {
+    const reminderQuery = `
+    SELECT reminders.id, reminders.customer_id,reminders.job_id, reminders.title, reminders.notes, reminders.remind_at, reminders.status
+    FROM reminders
+    WHERE reminders.id = $1 AND reminders.user_id = $2
+    `;
+    const reminderResult = await pool.query(reminderQuery, [
+      reminderId,
+      userId,
+    ]);
+    if (reminderResult.rowCount === 0) {
+      return res.status(404).json({ Message: "Reminder not found" });
+    }
+    return res.status(200).json({ reminder: reminderResult.rows[0] });
+  } catch (error) {
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+
