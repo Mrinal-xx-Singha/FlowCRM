@@ -25,6 +25,12 @@ export const createCustomer = async (req: Request, res: Response) => {
     if (email !== undefined && typeof email !== "string") {
       return res.status(400).json({ message: "Email must be a string" });
     }
+    if (phone !== undefined && typeof phone !== "string") {
+      return res.status(400).json({ message: "Phone must be a string" });
+    }
+    if (notes !== undefined && typeof notes !== "string") {
+      return res.status(400).json({ message: "Notes must be a string" });
+    }
 
     const customerQuery =
       "INSERT INTO customers(user_id,name,phone,email,notes) VALUES($1,$2,$3,$4,$5) RETURNING *";

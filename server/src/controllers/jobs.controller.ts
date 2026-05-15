@@ -22,6 +22,9 @@ export const createJob = async (req: Request, res: Response) => {
       message: "Title is required",
     });
   }
+  if (due_date !== undefined && typeof due_date !== "string") {
+    return res.status(400).json({ message: "Due date must be a string" });
+  }
 
   if (description !== undefined) {
     if (typeof description !== "string") {
