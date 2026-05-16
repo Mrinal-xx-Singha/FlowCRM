@@ -118,6 +118,85 @@ const dashboardSummaryHandler = async (req: Request, res: Response) => {
   }
 };
 
-const upcomingRemindersHandler = async (req: Request, res: Response) => {};
-const recentJobsHandler = async (req: Request, res: Response) => {};
+// Implement upcoming reminders and recent jobs handlers
+const upcomingRemindersHandler = async (req: Request, res: Response) => {
+  const userId = req.user?.id;
+
+  if (!userId) {
+    return res.status(401).json({
+      message: "Unauthorized",
+    });
+  }
+  try {
+    const upcomingRemindersResult = await pool.query(
+      `
+    SELECT
+      reminders.id,
+      reminders.title,
+      reminders.remind_at,
+      customers.name AS customer_name,
+      jobs.title AS job_title
+      FROM reminders
+      LEFT JOIN customers
+      ON reminders.customer_id = customers.id
+      LEFT JOIN jobs
+      ON reminders.job_id = jobs.id
+      WHERE reminders.user_id = $1
+      AND reminders.status = 'pending'
+      AND reminders.remind_at > NOW()
+      ORDER BY reminders.remind_at ASC
+    LIMIT 5
+      `,
+      [userId],
+    );
+    return res.status(200).json({
+      reminders: upcomingRemindersResult.rows,
+    });
+  } catch (error) {
+    console.error("❌ Error in upcoming reminders handler", error);
+
+    return res.status(500).json({
+      error: "Internal server error",
+    });
+  }
+};
+
+const recentJobsHandler = async (req: Request, res: Response) => {
+  const userId = req.user?.id;
+
+  if (!userId) {
+    return res.status(401).json({
+      message: "Unauthorized",
+    });
+  }
+  try {
+    const recentJobsResult = await pool.query(
+      `
+    SELECT
+      jobs.id,
+      jobs.title,
+      jobs.status,
+      jobs.created_at,
+      customers.name AS customer_name
+      FROM jobs
+      LEFT JOIN customers
+      ON jobs.customer_id = customers.id
+      WHERE jobs.user_id = $1
+      ORDER BY jobs.created_at DESC
+    LIMIT 5
+      `,
+      [userId],
+    );
+    return res.status(200).json({
+      jobs: recentJobsResult.rows,
+    });
+  } catch (error) {
+    console.error("❌ Error in recent jobs handler", error);
+
+    return res.status(500).json({
+      error: "Internal server error",
+    });
+  }
+};
+
 export { dashboardSummaryHandler, upcomingRemindersHandler, recentJobsHandler };
