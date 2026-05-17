@@ -1,4 +1,5 @@
 import express from "express";
+import cors from "cors";
 import dotenv from "dotenv";
 dotenv.config();
 import { connectDB } from "./db/dbConnect";
@@ -11,9 +12,11 @@ import reminderRoutes from "./routes/reminder.route"
 
 
 const app = express();
+app.use(cors());
 app.use(express.json());
 
 app.use("/auth", authRoutes);
+
 app.use("/api", authMiddleware, customerRoutes);
 app.use("/api", authMiddleware, jobsRoutes);
 app.use("/api", authMiddleware, reminderRoutes);
