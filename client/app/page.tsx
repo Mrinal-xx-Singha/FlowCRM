@@ -1,10 +1,7 @@
-import { Button } from "@/components/ui/button";
+import { redirect } from "next/navigation";
 
-
-const Home = () => {
-  return <div>
-    <Button variant="default" className="px-5 py-3 ">Click me</Button>
-  </div>;
-};
-
-export default Home;
+export default function Home() {
+  // Redirect to dashboard (if authenticated) or login (if not)
+  // For now, we redirect to dashboard
+  redirect("/dashboard");
+}
