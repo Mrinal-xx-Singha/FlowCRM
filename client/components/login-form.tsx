@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { authApi } from "@/lib/api";
+import { useAuth } from "@/context/auth";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -31,6 +31,7 @@ const formSchema = z.object({
 
 export function LoginForm() {
   const router = useRouter();
+  const { login } = useAuth();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -42,15 +43,14 @@ export function LoginForm() {
   });
 
   const loginMutation = useMutation({
-    mutationFn: (values: z.infer<typeof formSchema>) => authApi.login(values),
-    onSuccess: (data) => {
-      // Store token (consider using a more secure way or a dedicated auth hook/provider)
-      document.cookie = `token=${data.token}; path=/; max-age=3600`; // Expires in 1 hour
+    mutationFn: async (values: z.infer<typeof formSchema>) => {
+      await login(values.email, values.password);
+    },
+    onSuccess: () => {
       router.push("/");
     },
     onError: (error: any) => {
       console.error("Login failed:", error);
-      // You could set a form error here
       form.setError("root", { 
         message: error.response?.data?.error || "Login failed. Please check your credentials." 
       });

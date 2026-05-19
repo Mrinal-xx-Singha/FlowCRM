@@ -49,6 +49,9 @@ export function SignupForm() {
       if (data && data.token) {
         document.cookie = `token=${data.token}; path=/; max-age=3600`; // Expires in 1 hour
       }
+      if (data && data.name) {
+        localStorage.setItem("userName", data.name);
+      }
       router.push("/");
     },
     onError: (error: any) => {
