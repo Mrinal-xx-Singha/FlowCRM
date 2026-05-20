@@ -44,6 +44,10 @@ export const customerApi = {
     const response = await api.post("/api/customers", data);
     return response.data;
   },
+  updateCustomer:async(data:any) =>{
+    const response = await api.put(`/api/customers/${data.id}`, data);
+    return response.data;
+  }
 };
 
 export default api;
