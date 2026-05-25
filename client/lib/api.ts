@@ -44,10 +44,67 @@ export const customerApi = {
     const response = await api.post("/api/customers", data);
     return response.data;
   },
-  updateCustomer:async(data:any) =>{
-    const response = await api.put(`/api/customers/${data.id}`, data);
+  updateCustomer: async (data: any) => {
+    const response = await api.patch(`/api/customers/${data.id}`, data);
+    return response.data;
+  },
+  deleteCustomer: async (id: number) => {
+    const response = await api.delete(`/api/customers/${id}`);
     return response.data;
   }
+};
+
+export const jobsApi = {
+  getJobs: async (status?: string) => {
+    const response = await api.get("/api/jobs", { params: { status } });
+    return response.data;
+  },
+  createJob: async (data: any) => {
+    const response = await api.post("/api/jobs", data);
+    return response.data;
+  },
+  updateJob: async (data: any) => {
+    const response = await api.patch(`/api/jobs/${data.id}`, data);
+    return response.data;
+  },
+  deleteJob: async (id: number) => {
+    const response = await api.delete(`/api/jobs/${id}`);
+    return response.data;
+  },
+};
+
+export const dashboardApi = {
+  getSummary: async () => {
+    const response = await api.get("/api/dashboard/summary");
+    return response.data;
+  },
+  getRecentJobs: async () => {
+    const response = await api.get("/api/dashboard/recent-jobs");
+    return response.data;
+  },
+  getUpcomingReminders: async () => {
+    const response = await api.get("/api/dashboard/upcoming-reminders");
+    return response.data;
+  },
+};
+
+export const reminderApi = {
+  getReminders: async (status?: string) => {
+    const response = await api.get("/api/reminders", { params: { status } });
+    return response.data;
+  },
+  createReminder: async (data: any) => {
+    const response = await api.post("/api/reminders", data);
+    return response.data;
+  },
+  updateReminder: async ({ id, data }: { id: number; data: any }) => {
+    const response = await api.patch(`/api/reminders/${id}`, data);
+    return response.data;
+  },
+  deleteReminder: async (id: number) => {
+    const response = await api.delete(`/api/reminders/${id}`);
+    return response.data;
+  },
 };
 
 export default api;
