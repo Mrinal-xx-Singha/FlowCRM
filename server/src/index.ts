@@ -10,6 +10,7 @@ import jobsRoutes from "./routes/jobs.route";
 import dashboardRoutes from "./routes/dashboard.route"
 import reminderRoutes from "./routes/reminder.route"
 import userRoutes from "./routes/user.route"
+import { startCronJob } from "./services/cron.service"
 
 
 const app = express();
@@ -26,6 +27,7 @@ app.use("/api", authMiddleware, dashboardRoutes)
 const startServer = async () => {
   await connectDB();
   const PORT = process.env.PORT;
+  await startCronJob();
   app.listen(PORT, () => {
     console.log(`Server running on PORT: ${PORT}`);
   });
