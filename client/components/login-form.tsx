@@ -51,8 +51,8 @@ export function LoginForm() {
     },
     onError: (error: any) => {
       console.error("Login failed:", error);
-      form.setError("root", { 
-        message: error.response?.data?.error || "Login failed. Please check your credentials." 
+      form.setError("root", {
+        message: error.response?.data?.error || "Login failed. Please check your credentials."
       });
     },
   });
@@ -94,9 +94,7 @@ export function LoginForm() {
           <div className="grid gap-2">
             <div className="flex items-center">
               <Label htmlFor="password">Password</Label>
-              <Link href="#" className="ml-auto inline-block text-sm underline">
-                Forgot your password?
-              </Link>
+
             </div>
             <Input
               id="password"

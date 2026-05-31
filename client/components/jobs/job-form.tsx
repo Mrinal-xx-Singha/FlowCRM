@@ -8,6 +8,7 @@ import { jobsApi, customerApi } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { toast } from "sonner";
 
 const formSchema = z.object({
   title: z.string().min(2, "Title is required"),
@@ -48,6 +49,7 @@ export function JobForm({ onSuccessCallback }: JobFormProps) {
     mutationFn: (data: JobFormValues) => jobsApi.createJob(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["jobs"] });
+      toast.success("Job created successfully!");
       form.reset();
       if (onSuccessCallback) onSuccessCallback();
     },

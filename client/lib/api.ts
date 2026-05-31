@@ -107,4 +107,20 @@ export const reminderApi = {
   },
 };
 
+export const userApi = {
+  getProfile: async () => {
+
+    const response = await api.get("/api/me");
+    return response.data;
+  },
+  updateProfile: async (data: any) => {
+    const response = await api.patch("/api/profile", data);
+    return response.data;
+  },
+  updatePassword: async (data: any) => {
+    const response = await api.patch("/api/password", data);
+    return response.data;
+  },
+};
+
 export default api;

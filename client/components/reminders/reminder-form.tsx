@@ -10,6 +10,7 @@ import { reminderApi, customerApi, jobsApi } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { toast } from "sonner";
 
 const formSchema = z.object({
   title: z.string().min(2, "Title is required"),
@@ -60,6 +61,7 @@ export function ReminderForm({ onSuccessCallback }: ReminderFormProps) {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["reminders"] });
       queryClient.invalidateQueries({ queryKey: ["dashboard"] });
+      toast.success("Reminder created successfully!");
       form.reset();
       if (onSuccessCallback) onSuccessCallback();
     },
