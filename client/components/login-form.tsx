@@ -47,7 +47,7 @@ export function LoginForm() {
       await login(values.email, values.password);
     },
     onSuccess: () => {
-      router.push("/");
+      router.push("/dashboard");
     },
     onError: (error: any) => {
       console.error("Login failed:", error);

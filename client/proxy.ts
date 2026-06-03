@@ -6,7 +6,7 @@ export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
 
   // 1. Define public paths that don't require a token
-  const isPublicPath = pathname === '/login' || pathname === '/signup'
+  const isPublicPath = pathname === '/login' || pathname === '/signup' || pathname === '/' 
 
   // 2. If no token and trying to access a private path -> Redirect to login
   if (!token && !isPublicPath) {
@@ -15,7 +15,7 @@ export function proxy(request: NextRequest) {
 
   // 3. If token exists and trying to access login/signup -> Redirect to home
   if (token && isPublicPath) {
-    return NextResponse.redirect(new URL('/', request.url))
+    return NextResponse.redirect(new URL('/dashboard', request.url))
   }
 
   // Allow the request to continue if none of the above conditions met
