@@ -6,6 +6,7 @@ import * as z from "zod";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { authApi } from "@/lib/api";
+import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -52,10 +53,15 @@ export function SignupForm() {
       if (data && data.name) {
         localStorage.setItem("userName", data.name);
       }
+      toast.success("Account created successfully!");
       router.push("/");
     },
     onError: (error: any) => {
       console.error("Signup failed:", error);
+      if (error.response?.status === 439) {
+        toast.error("Too many signup attempts. Please try again later.");
+        return;
+      }
       // You could set a form error here
       form.setError("root", {
         message: error.response?.data?.error || "Signup failed. Please check your information."

@@ -18,9 +18,12 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
+import { toast } from "sonner";
+
+
 
 const formSchema = z.object({
-  email: z.string().email({
+  email: z.email({
     message: "Please enter a valid email address.",
   }),
   password: z.string().min(7, {
@@ -41,16 +44,24 @@ export function LoginForm() {
       rememberMe: false,
     },
   });
-
   const loginMutation = useMutation({
     mutationFn: async (values: z.infer<typeof formSchema>) => {
       await login(values.email, values.password);
     },
     onSuccess: () => {
+
+      toast.success("Login successful!");
       router.push("/dashboard");
     },
     onError: (error: any) => {
-      console.error("Login failed:", error);
+      // 1. Check for Rate Limit Error (429)
+      if (error.response?.status === 429) {
+        const rateLimitMessage = error.response?.data.message || "Too many login attempts. Please try again later.";
+        toast.error(rateLimitMessage);
+        return; // Stop execution
+      }
+
+      // 2. Otherwise, show standard login failure
       form.setError("root", {
         message: error.response?.data?.error || "Login failed. Please check your credentials."
       });
