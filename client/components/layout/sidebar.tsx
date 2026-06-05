@@ -5,7 +5,7 @@ export function Sidebar() {
   return (
     <aside className="w-64 border-r bg-background flex flex-col h-full">
       <div className="p-6 border-b">
-        <h2 className="text-lg font-bold">CRM MVP</h2>
+        <h2 className="text-lg font-bold">Flow CRM</h2>
       </div>
       <nav className="flex flex-col gap-2 p-4">
         <Link href="/dashboard" className="px-3 py-2 rounded-md hover:bg-muted transition-colors">Dashboard</Link>

@@ -40,6 +40,11 @@ export const customerApi = {
     const response = await api.get("/api/customers");
     return response.data;
   },
+  getCustomerById: async (id: number) => {
+    const response = await api.get(`/api/customers/${id}`);
+    return response.data;
+
+  },
   createCustomer: async (data: any) => {
     const response = await api.post("/api/customers", data);
     return response.data;
@@ -57,6 +62,10 @@ export const customerApi = {
 export const jobsApi = {
   getJobs: async (status?: string) => {
     const response = await api.get("/api/jobs", { params: { status } });
+    return response.data;
+  },
+  getJobById: async (id: number) => {
+    const response = await api.get(`/api/jobs/${id}`);
     return response.data;
   },
   createJob: async (data: any) => {

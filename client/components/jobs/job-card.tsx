@@ -7,6 +7,8 @@ import { Button } from "../ui/button";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { jobsApi } from "@/lib/api";
 import { toast } from "sonner";
+import Link from "next/link";
+
 
 export interface Job {
   id: number;
@@ -59,7 +61,9 @@ export function JobCard({ job, index }: JobCardProps) {
             }`}
         >
           <div className="flex justify-between items-start gap-2">
+            <Link href={`/jobs/${job.id}`} className="hover:underline hover:text-blue-600">
             <h4 className="font-medium leading-none text-foreground">{job.title}</h4>
+            </Link>
             <Button
               onClick={() => handleDelete(job.id)}
               variant="destructive" size="sm">

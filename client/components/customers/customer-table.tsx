@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/dialog";
 import { customerApi } from "@/lib/api";
 import { CustomerForm } from "./customer-form";
+import Link from "next/dist/client/link";
 
 
 interface Customer {
@@ -91,7 +92,13 @@ export function CustomerTable() {
             ) : (
               customers.map((customer: Customer) => (
                 <TableRow key={customer.id}>
-                  <TableCell>{customer.name}</TableCell>
+                  <TableCell>
+                    <Link 
+                    className="hover:underline hover:text-blue-600"
+                    href={`/customers/${customer.id}`}>
+                      {customer.name}
+                    </Link>
+                  </TableCell>
                   <TableCell>{customer.email}</TableCell>
                   <TableCell>{customer.phone}</TableCell>
                   <TableCell>{customer.notes}</TableCell>
