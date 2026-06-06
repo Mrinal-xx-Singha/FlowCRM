@@ -30,11 +30,20 @@ api.interceptors.response.use(
     return response;
   },
   // If we get a 401 response, it means the token is invalid or expired. We can clear the token and redirect to login.
-  (error) => {
+    (error) => {
     if (error.response && error.response.status === 401) {
-      document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-      window.location.href = "/login";
+      document.cookie = "token=;expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+      
+      // FIX: Check against an array of public paths
+      const currentPath = window.location.pathname;
+      const publicPaths = ["/", "/login", "/signup"];
+      
+      // Only redirect if they are trying to access a private dashboard page
+      if (!publicPaths.includes(currentPath)) {
+        window.location.href = "/login";
+      }
     }
+    
     return Promise.reject(error);
   }
 )
