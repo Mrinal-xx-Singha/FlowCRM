@@ -20,8 +20,7 @@ import {
 } from "@/components/ui/dialog";
 import { customerApi } from "@/lib/api";
 import { CustomerForm } from "./customer-form";
-import Link from "next/dist/client/link";
-
+import Link from "next/link";
 
 interface Customer {
   id: number;

@@ -24,6 +24,22 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
+api.interceptors.response.use(
+  // If the response is successful, just return it.
+  (response) => {
+    return response;
+  },
+  // If we get a 401 response, it means the token is invalid or expired. We can clear the token and redirect to login.
+  (error) => {
+    if (error.response && error.response.status === 401) {
+      document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+      window.location.href = "/login";
+    }
+    return Promise.reject(error);
+  }
+)
+
+
 export const authApi = {
   login: async (data: any) => {
     const response = await api.post("/auth/login", data);

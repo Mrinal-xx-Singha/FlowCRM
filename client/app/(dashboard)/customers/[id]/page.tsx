@@ -6,7 +6,7 @@ import { customerApi } from "@/lib/api";
 import { ArrowLeft, Mail, Phone, StickyNote, UserCircle } from "lucide-react";
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 const CustomerDetailsPage = () => {
   const params = useParams();
@@ -35,13 +35,12 @@ const CustomerDetailsPage = () => {
 
   return (
     <div className="max-w-3xl flex flex-col gap-6">
-      <Button 
-        variant="ghost" 
-        className="w-fit -ml-4 text-muted-foreground hover:text-foreground"
-        onClick={() => router.back()}
+      <Link 
+        href="/customers" 
+        className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 w-fit -ml-4 text-muted-foreground"
       >
         <ArrowLeft className="mr-2 h-4 w-4" /> Back
-      </Button>
+      </Link>
 
       <Card className="shadow-sm border-slate-200/60">
         <CardHeader className="pb-4 border-b border-slate-100 bg-slate-50/50">
