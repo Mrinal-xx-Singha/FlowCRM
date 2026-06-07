@@ -73,7 +73,13 @@ export function ReminderForm({ onSuccessCallback }: ReminderFormProps) {
   });
 
   const onSubmit: import("react-hook-form").SubmitHandler<ReminderFormValues> = (data) => {
-    createMutation.mutate(data);
+    // Convert the naive local datetime string from the input into a strict UTC ISO string
+    const utcDate = new Date(data.remind_at).toISOString();
+
+    createMutation.mutate({
+      ...data,
+      remind_at: utcDate,
+    });
   };
 
   return (

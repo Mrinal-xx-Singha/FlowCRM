@@ -84,7 +84,7 @@ export const createReminder = async (req: Request, res: Response) => {
 
   const trimmedTitle = title.trim();
 
-  const trimmedNotes = notes !== undefined ? notes.trim() : null;
+  const trimmedNotes = typeof notes === "string" ? notes.trim() : null;
 
   try {
     // verify customer ownership
