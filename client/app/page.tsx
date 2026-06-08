@@ -104,9 +104,7 @@ export default function Home() {
       <footer className="bg-slate-900 text-slate-400 py-12 border-t border-slate-800">
         <div className="container mx-auto px-6 text-center flex flex-col items-center">
           <div className="flex items-center gap-2 mb-6 opacity-80">
-            <div className="h-6 w-6 bg-slate-700 rounded flex items-center justify-center">
-              <span className="text-slate-300 font-bold text-xs leading-none">F</span>
-            </div>
+            <Image src={crmLogo} alt="Flow CRM Logo" width={32} height={32} className="rounded" />
             <span className="text-lg font-semibold tracking-tight text-slate-300">FlowCRM</span>
           </div>
           <p className="text-sm">
