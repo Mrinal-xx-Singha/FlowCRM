@@ -7,7 +7,7 @@ import crmLogo from "../public/crm-logo.png";
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-background text-foreground selection:bg-primary/20">
+    <div className="min-h-screen bg-background text-foreground selection:bg-primary/20 selection:text-primary">
       {/* Navigation */}
       <nav className="container mx-auto px-6 py-4 flex items-center justify-between border-b border-border bg-background/50 backdrop-blur-md sticky top-0 z-50">
         <div className="flex items-center gap-2">

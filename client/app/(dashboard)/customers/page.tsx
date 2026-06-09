@@ -21,7 +21,7 @@ export default function CustomersPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">Customers</h1>
-          <p className="text-muted-foreground">Manage your customers and leads.</p>
+          <p className="text-muted-foreground text-sm md:text-base">Manage your customers and leads.</p>
         </div>
         
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>

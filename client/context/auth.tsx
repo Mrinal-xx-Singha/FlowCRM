@@ -8,9 +8,9 @@ type User = {
   email: string;
 }
 
-type AuthContextType = {
+  type AuthContextType = {
   user: User | null;
-  login: (email: string, password: string) => Promise<void>;
+  login: (email: string, password: string, rememberMe?: boolean) => Promise<void>;
   logout: () => void;
   isLoading: boolean;
 }
@@ -36,9 +36,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }
 
-  const login = async (email: string, password: string) => {
-    const response = await api.post('/auth/login', { email, password });
-    document.cookie = `token=${response.data.token}; path=/; max-age=3600`;
+  const login = async (email: string, password: string, rememberMe: boolean = false) => {
+    const response = await api.post('/auth/login', { email, password, rememberMe });
+    // If rememberMe is true, cookie lasts 30 days (2592000s). Otherwise 1 day (86400s).
+    const maxAge = rememberMe ? 2592000 : 86400; 
+    document.cookie = `token=${response.data.token}; path=/; max-age=${maxAge}`;
     setUser(response.data.user);
   }
 

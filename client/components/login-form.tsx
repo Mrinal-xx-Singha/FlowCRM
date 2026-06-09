@@ -46,7 +46,7 @@ export function LoginForm() {
   });
   const loginMutation = useMutation({
     mutationFn: async (values: z.infer<typeof formSchema>) => {
-      await login(values.email, values.password);
+      await login(values.email, values.password, values.rememberMe);
     },
     onSuccess: () => {
 
