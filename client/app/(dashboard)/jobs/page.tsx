@@ -20,15 +20,15 @@ export default function JobsPage() {
     <div className="flex h-[calc(100vh-6rem)] flex-col gap-6">
       <div className="flex items-center justify-between shrink-0">
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight">Jobs Board</h1>
-          <p className="text-muted-foreground">Manage your deals and projects through the pipeline.</p>
+          <h1 className=" text-md md:text-2xl font-semibold tracking-tight">Jobs Board</h1>
+          <p className="text-sm text-muted-foreground">Manage your deals and projects through the pipeline.</p>
         </div>
 
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
             <Button>Add Job</Button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-[425px]">
+          <DialogContent className="sm:max-w-106.25">
             <DialogHeader>
               <DialogTitle>Add New Job</DialogTitle>
               <DialogDescription>

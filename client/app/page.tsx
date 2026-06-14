@@ -34,7 +34,7 @@ export default function Home() {
         </div>
         <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight mb-8 leading-tight">
           Manage your clients. <br className="hidden md:block" />
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-emerald-400">
+          <span className="text-foreground">
             Stay in the Flow.
           </span>
         </h1>
@@ -101,11 +101,11 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-slate-900 text-slate-400 py-12 border-t border-slate-800">
+      <footer className="bg-foreground text-muted-foreground py-16 border-t border-border">
         <div className="container mx-auto px-6 text-center flex flex-col items-center">
           <div className="flex items-center gap-2 mb-6 opacity-80">
             <Image src={crmLogo} alt="Flow CRM Logo" width={32} height={32} className="rounded" />
-            <span className="text-lg font-semibold tracking-tight text-slate-300">FlowCRM</span>
+            <span className="text-lg font-semibold tracking-tight text-background">FlowCRM</span>
           </div>
           <p className="text-sm">
             &copy; {new Date().getFullYear()} FlowCRM Inc. Built for small business.
