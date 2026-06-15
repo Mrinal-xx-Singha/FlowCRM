@@ -15,7 +15,7 @@ const formSchema = z.object({
   customer_id: z.string().min(1, "Customer is required"),
   description: z.string().optional().or(z.literal("")),
   due_date: z.string().optional().or(z.literal("")),
-  status: z.enum(["pending", "in_progress", "completed"]).default("pending"),
+  status: z.enum(["pending", "in_progress", "completed"]),
 });
 
 type JobFormValues = z.infer<typeof formSchema>;

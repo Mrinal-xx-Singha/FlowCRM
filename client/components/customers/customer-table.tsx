@@ -21,6 +21,8 @@ import {
 import { customerApi } from "@/lib/api";
 import { CustomerForm } from "./customer-form";
 import Link from "next/link";
+import { Search } from "lucide-react";
+import { Input } from "../ui/input";
 
 interface Customer {
   id: number;
@@ -32,6 +34,7 @@ interface Customer {
 
 export function CustomerTable() {
   const [editingCustomer, setEditingCustomer] = useState<Customer | null>(null);
+  const [searchQuery,setSearchQuery]=useState("")
 
   
   const { data, isLoading, isError } = useQuery({
@@ -60,6 +63,15 @@ export function CustomerTable() {
 
   const customers = data?.customers ?? [];
 
+  const filteredCustomers = customers.filter((c:Customer) =>{
+    const searchLower= searchQuery.toLowerCase()
+    return(
+      c.name.toLowerCase().includes(searchLower) ||
+      c.email.toLowerCase().includes(searchLower) || 
+      c.phone && c.phone.includes(searchLower)
+    )
+  })
+
   if (isLoading) {
     return <div className="p-4 text-center">Loading customers...</div>;
   }
@@ -70,7 +82,18 @@ export function CustomerTable() {
 
   return (
     <>
-      <div className="rounded-md border">
+    <div className="relative mb-4 max-w-sm">
+      <Search 
+      className="absolute left-3 top-1/2 w-4 h-4 -translate-y-1/2 text-muted-foreground"
+      />
+      <Input 
+      placeholder="Search customers...."
+      className="pl-9 bg-card"
+      value={searchQuery}
+      onChange={(e)=>setSearchQuery(e.target.value)}
+      />
+    </div>
+      <div className="rounded-md border bg-card">
         <Table>
           <TableHeader>
             <TableRow>
@@ -82,14 +105,14 @@ export function CustomerTable() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {customers.length === 0 ? (
+            {filteredCustomers.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={5} className="text-center py-6 text-muted-foreground">
                   No customers found.
                 </TableCell>
               </TableRow>
             ) : (
-              customers.map((customer: Customer) => (
+              filteredCustomers.map((customer: Customer) => (
                 <TableRow key={customer.id}>
                   <TableCell>
                     <Link 
@@ -124,7 +147,7 @@ export function CustomerTable() {
       </div>
 
       <Dialog open={!!editingCustomer} onOpenChange={(open) => !open && setEditingCustomer(null)}>
-        <DialogContent className="sm:max-w-[425px]">
+        <DialogContent className="sm:max-w-106.25">
           <DialogHeader>
             <DialogTitle>Edit Customer</DialogTitle>
             <DialogDescription>
