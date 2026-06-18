@@ -5,6 +5,12 @@ FlowCRM is a premium, minimalist Customer Relationship Management (CRM) platform
 The UI is heavily inspired by modern, high-end SaaS platforms (like Cal.com) featuring a high-contrast monochrome aesthetic, sharp geometric typography, and a massive emphasis on usability.
 
 ## Images 
+<img width="1839" height="902" alt="Screenshot (19)" src="https://github.com/user-attachments/assets/d3a6bf57-cf28-4c19-989c-3cfb761ac944" />
+<img width="1862" height="897" alt="Screenshot (21)" src="https://github.com/user-attachments/assets/c96970db-ce5e-4e00-93da-9c1f02bdaf3d" />
+<img width="1846" height="896" alt="Screenshot (23)" src="https://github.com/user-attachments/assets/ea1b8dbf-326f-4e6c-92b1-1e8cbc670b44" />
+<img width="1866" height="892" alt="Screenshot (22)" src="https://github.com/user-attachments/assets/5c4573ec-c4ec-4738-8e89-3efefc6acb09" />
+<img width="1860" height="891" alt="Screenshot (24)" src="https://github.com/user-attachments/assets/9df2bb3d-4c9d-4d87-a26d-c09264e05880" />
+
 
 
 ## ✨ Core Features
