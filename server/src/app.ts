@@ -10,6 +10,7 @@ import jobsRoutes from "./routes/jobs.route";
 import dashboardRoutes from "./routes/dashboard.route";
 import reminderRoutes from "./routes/reminder.route";
 import userRoutes from "./routes/user.route";
+import cronRoutes from "./routes/cron.route"
 import rateLimit from "express-rate-limit";
 
 const app = express();
@@ -30,6 +31,7 @@ const globalLimiter = rateLimit({
 app.use(globalLimiter);
 
 app.use("/auth", authRoutes);
+app.use("/api", cronRoutes);
 app.use("/api", authMiddleware, userRoutes);
 app.use("/api", authMiddleware, customerRoutes);
 app.use("/api", authMiddleware, jobsRoutes);
