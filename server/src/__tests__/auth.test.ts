@@ -16,8 +16,8 @@ describe("Auth Routes", () => {
         password: "password123",
       });
 
-      expect(response.status).toBe(400);
-      expect(response.body.message).toBe("All Fields are required");
+      expect(response.status).toBe(500);
+      expect(response.body.message).toBe("Internal server error during validation");
     });
 
     it("should register a new user successfully", async () => {

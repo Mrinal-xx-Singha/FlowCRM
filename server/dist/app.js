@@ -14,6 +14,7 @@ const jobs_route_1 = __importDefault(require("./routes/jobs.route"));
 const dashboard_route_1 = __importDefault(require("./routes/dashboard.route"));
 const reminder_route_1 = __importDefault(require("./routes/reminder.route"));
 const user_route_1 = __importDefault(require("./routes/user.route"));
+const cron_route_1 = __importDefault(require("./routes/cron.route"));
 const express_rate_limit_1 = __importDefault(require("express-rate-limit"));
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)());
@@ -30,6 +31,7 @@ const globalLimiter = (0, express_rate_limit_1.default)({
 });
 app.use(globalLimiter);
 app.use("/auth", auth_route_1.default);
+app.use("/api", cron_route_1.default);
 app.use("/api", auth_middleware_1.default, user_route_1.default);
 app.use("/api", auth_middleware_1.default, customer_route_1.default);
 app.use("/api", auth_middleware_1.default, jobs_route_1.default);

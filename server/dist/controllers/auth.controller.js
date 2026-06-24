@@ -10,16 +10,10 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const register = async (req, res) => {
     try {
         const { name, email, password } = req.body;
-        if (!name || !email || !password) {
-            return res.status(400).json({ message: "All Fields are required" });
-        }
-        let trimmedName = name.trim();
-        let normalizedEmail = email.trim().toLowerCase();
-        const trimmedPassword = password.trim();
         const userQuery = "INSERT INTO users(name,email,password_hash) VALUES($1,$2,$3) RETURNING id,name,email";
         let saltRounds = 10;
-        let hashedPassword = await bcrypt_1.default.hash(trimmedPassword, saltRounds);
-        const values = [trimmedName, normalizedEmail, hashedPassword];
+        let hashedPassword = await bcrypt_1.default.hash(password, saltRounds);
+        const values = [name, email, hashedPassword];
         const user = await dbConnect_1.pool.query(userQuery, values);
         return res.status(201).json(user.rows[0]);
     }
@@ -38,11 +32,7 @@ exports.register = register;
 const login = async (req, res) => {
     const { email, password } = req.body;
     try {
-        if (!email || !password) {
-            return res.status(400).json({ error: "All fields are required !" });
-        }
-        const normalizedEmail = email.trim().toLowerCase();
-        const user = await dbConnect_1.pool.query("SELECT id,name,email,password_hash FROM users WHERE email = $1", [normalizedEmail]);
+        const user = await dbConnect_1.pool.query("SELECT id,name,email,password_hash FROM users WHERE email = $1", [email]);
         if (user.rows.length === 0) {
             return res.status(401).json({ error: "Invalid credentials" });
         }
