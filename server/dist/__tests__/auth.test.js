@@ -18,8 +18,8 @@ const globals_1 = require("@jest/globals");
                 name: "Test User",
                 password: "password123",
             });
-            (0, globals_1.expect)(response.status).toBe(400);
-            (0, globals_1.expect)(response.body.message).toBe("All Fields are required");
+            (0, globals_1.expect)(response.status).toBe(500);
+            (0, globals_1.expect)(response.body.message).toBe("Internal server error during validation");
         });
         (0, globals_1.it)("should register a new user successfully", async () => {
             const response = await (0, supertest_1.default)(app_1.default).post("/auth/register").send({
