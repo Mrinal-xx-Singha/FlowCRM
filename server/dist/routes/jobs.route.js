@@ -2,10 +2,12 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const jobs_controller_1 = require("../controllers/jobs.controller");
+const validate_middleware_1 = require("../middleware/validate.middleware");
+const jobs_schema_1 = require("../schemas/jobs.schema");
 const router = (0, express_1.Router)();
-router.post("/jobs", jobs_controller_1.createJob);
-router.get("/jobs", jobs_controller_1.getJobs);
-router.get("/jobs/:id", jobs_controller_1.getJob);
-router.patch("/jobs/:id", jobs_controller_1.updateJob);
-router.delete("/jobs/:id", jobs_controller_1.deleteJob);
+router.post("/jobs", (0, validate_middleware_1.validate)(jobs_schema_1.createJobSchema), jobs_controller_1.createJob);
+router.get("/jobs", (0, validate_middleware_1.validate)(jobs_schema_1.getJobQuerySchema), jobs_controller_1.getJobs);
+router.get("/jobs/:id", (0, validate_middleware_1.validate)(jobs_schema_1.jobIdSchema), jobs_controller_1.getJob);
+router.patch("/jobs/:id", (0, validate_middleware_1.validate)(jobs_schema_1.updateJobSchema), jobs_controller_1.updateJob);
+router.delete("/jobs/:id", (0, validate_middleware_1.validate)(jobs_schema_1.jobIdSchema), jobs_controller_1.deleteJob);
 exports.default = router;
