@@ -22,9 +22,11 @@ type JobFormValues = z.infer<typeof formSchema>;
 
 interface JobFormProps {
   onSuccessCallback?: () => void;
+  jobId?: number;
+  initialData?: any;
 }
 
-export function JobForm({ onSuccessCallback }: JobFormProps) {
+export function JobForm({ onSuccessCallback, jobId, initialData }: JobFormProps) {
   const queryClient = useQueryClient();
 
   const { data: customerData } = useQuery({
@@ -36,7 +38,13 @@ export function JobForm({ onSuccessCallback }: JobFormProps) {
 
   const form = useForm<JobFormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
+    defaultValues: initialData ? {
+      title: initialData.title,
+      customer_id: initialData.customer_id.toString(),
+      description: initialData.description || "",
+      due_date: initialData.due_date ? initialData.due_date.split("T")[0] : "",
+      status: initialData.status || "pending",
+    } : {
       title: "",
       customer_id: "",
       description: "",
@@ -60,8 +68,26 @@ export function JobForm({ onSuccessCallback }: JobFormProps) {
     },
   });
 
+  const updateMutation = useMutation({
+    mutationFn: (data: JobFormValues) => jobsApi.updateJob({ id: jobId, ...data }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["jobs"] });
+      toast.success("Job updated successfully!");
+      if (onSuccessCallback) onSuccessCallback();
+    },
+    onError: (error: any) => {
+      form.setError("root", {
+        message: error.response?.data?.message || "Failed to update job.",
+      });
+    },
+  });
+
   const onSubmit :SubmitHandler<JobFormValues> = (data) => {
-    createMutation.mutate(data);
+    if (jobId) {
+      updateMutation.mutate(data);
+    } else {
+      createMutation.mutate(data);
+    }
   };
 
   return (
@@ -108,8 +134,8 @@ export function JobForm({ onSuccessCallback }: JobFormProps) {
       </div>
 
       <div className="flex justify-end pt-4">
-        <Button type="submit" disabled={createMutation.isPending}>
-          {createMutation.isPending ? "Saving..." : "Create Job"}
+        <Button type="submit" disabled={createMutation.isPending || updateMutation.isPending}>
+          {createMutation.isPending || updateMutation.isPending ? "Saving..." : jobId ? "Update Job" : "Create Job"}
         </Button>
       </div>
     </form>

@@ -8,6 +8,9 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { jobsApi } from "@/lib/api";
 import { toast } from "sonner";
 import Link from "next/link";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
+import { JobForm } from "./job-form";
+import { Edit2 } from "lucide-react";
 
 
 export interface Job {
@@ -27,6 +30,7 @@ interface JobCardProps {
 
 export function JobCard({ job, index }: JobCardProps) {
   const queryClient = useQueryClient();
+  const [isEditOpen, setIsEditOpen] = React.useState(false);
 
   const deleteMutaion = useMutation({
     mutationFn: (id: number) => jobsApi.deleteJob(id),
@@ -64,11 +68,30 @@ export function JobCard({ job, index }: JobCardProps) {
             <Link href={`/jobs/${job.id}`} className="hover:underline hover:text-blue-600">
             <h4 className="font-medium leading-none text-foreground">{job.title}</h4>
             </Link>
-            <Button
-              onClick={() => handleDelete(job.id)}
-              variant="destructive" size="sm">
-              <Trash2 className="h-3.5 w-3.5" />
-            </Button>
+            <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+              <Dialog open={isEditOpen} onOpenChange={setIsEditOpen}>
+                <DialogTrigger asChild>
+                  <Button variant="outline" size="sm" className="h-7 w-7 p-0">
+                    <Edit2 className="h-3.5 w-3.5" />
+                  </Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Edit Job</DialogTitle>
+                  </DialogHeader>
+                  <JobForm 
+                    jobId={job.id} 
+                    initialData={job} 
+                    onSuccessCallback={() => setIsEditOpen(false)} 
+                  />
+                </DialogContent>
+              </Dialog>
+              <Button
+                onClick={() => handleDelete(job.id)}
+                variant="destructive" size="sm" className="h-7 w-7 p-0">
+                <Trash2 className="h-3.5 w-3.5" />
+              </Button>
+            </div>
           </div>
 
           {job.description && (
