@@ -12,7 +12,7 @@ interface JobColumnProps {
 
 export function JobColumn({ id, title, jobs }: JobColumnProps) {
   return (
-    <div className="flex h-full min-h-[500px] w-full min-w-[300px] flex-col rounded-xl bg-zinc-50/50 p-4">
+    <div className="flex h-full min-h-125 w-full min-w-75 flex-col rounded-xl bg-zinc-50/50 p-4">
       <div className="mb-4 flex items-center justify-between">
         <h3 className="font-semibold text-zinc-900">{title}</h3>
         <span className="flex h-6 w-6 items-center justify-center rounded-full bg-zinc-200/50 text-xs font-medium text-zinc-600">

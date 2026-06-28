@@ -97,5 +97,13 @@ cd server
 npm run test
 ```
 
+## ⚠️ Challenges & Learnings
+
+**Express `IncomingMessage` Getter Issue During Validation**
+While implementing a centralized Zod validation middleware, we encountered a tricky `TypeError: Cannot set property query of #<IncomingMessage> which has only a getter`. This occurred when attempting to cleanly overwrite `req.query` with the sanitized data returned by Zod.
+
+* **The Cause:** Express dynamically defines `req.query` (and sometimes `req.params`) as a read-only "getter" property on the request object under the hood to lazily evaluate the query string. Because it lacks a setter, directly assigning to it (`req.query = ...`) throws an error.
+* **The Solution:** We bypassed the getter completely by utilizing `Object.defineProperty(req, "query", { value: parsedData.query, writable: true })`. This forcefully overwrites the property at a lower level, injecting the validated and sanitized Zod data into the request pipeline seamlessly without breaking Express's internal architecture.
+
 ## 📄 License
 This project is licensed under the MIT License.

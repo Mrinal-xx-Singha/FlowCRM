@@ -1,22 +1,29 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.validate = void 0;
-const v3_1 = require("zod/v3");
+const zod_1 = require("zod");
 // takes a schema and returns an express middleware
 const validate = (schema) => {
     return async (req, res, next) => {
         try {
-            // parse the body,query, and params against the schema
-            await schema.parseAsync({
+            const parsedData = (await schema.parseAsync({
                 body: req.body,
                 query: req.query,
                 params: req.params
-            });
+            }));
+            // Overwrite the raw request data with zods perfectly clean data! 
+            if (parsedData.body)
+                req.body = parsedData.body;
+            if (parsedData.query)
+                Object.defineProperty(req, "query", { value: parsedData.query, writable: true });
+            if (parsedData.params)
+                Object.defineProperty(req, "params", { value: parsedData.params, writable: true });
             // if it passes, move on to the controller!
             return next();
         }
         catch (error) {
-            if (error instanceof v3_1.ZodError) {
+            console.error("Validation error:", error);
+            if (error instanceof zod_1.ZodError || error?.name === "ZodError") {
                 // Automatically format zod errors into a clean array for the frontend 
                 const formattedErrors = error.errors.map((err) => ({
                     field: err.path.join("."),
@@ -27,7 +34,10 @@ const validate = (schema) => {
                     errors: formattedErrors
                 });
             }
-            return res.status(500).json({ message: "Internal server error during validation" });
+            return res.status(500).json({
+                message: "Internal server error during validation",
+                error: error?.message || String(error)
+            });
         }
     };
 };
