@@ -38,6 +38,9 @@ const updateUserProfile = async (req, res) => {
         return res.json({ id: updatedUser.id, name: updatedUser.name, email: updatedUser.email });
     }
     catch (error) {
+        if (error.code === '23505') { // Unique violation error code in PostgreSQL
+            return res.status(400).json({ message: "Email already in use" });
+        }
         console.log(error);
         return res.status(500).json({ message: "Internal server error" });
     }
@@ -62,14 +65,11 @@ const updateUserPassword = async (req, res) => {
             return res.status(400).json({ message: "Current password is incorrect" });
         }
         // if it matches , hash and sabe the new password
-        const hashedNewPassword = await bcrypt_1.default.hash(newPassword, 10); // Replace with actual hashing logic
+        const hashedNewPassword = await bcrypt_1.default.hash(newPassword, 10);
         await dbConnect_1.pool.query(`UPDATE users SET password_hash = $1 WHERE id = $2`, [hashedNewPassword, userId]);
         return res.json({ message: "Password updated successfully" });
     }
     catch (error) {
-        if (error.code === '23505') { // Unique violation error code in PostgreSQL
-            return res.status(400).json({ message: "Email already in use" });
-        }
         console.log(error);
         return res.status(500).json({ message: "Internal server error" });
     }

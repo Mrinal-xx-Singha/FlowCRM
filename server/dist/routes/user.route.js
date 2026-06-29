@@ -2,8 +2,10 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const user_controller_1 = require("../controllers/user.controller");
+const validate_middleware_1 = require("../middleware/validate.middleware");
+const user_schema_1 = require("../schemas/user.schema");
 const router = (0, express_1.Router)();
 router.get("/me", user_controller_1.getCurrentUser);
-router.patch("/profile", user_controller_1.updateUserProfile);
-router.patch("/password", user_controller_1.updateUserPassword);
+router.patch("/profile", (0, validate_middleware_1.validate)(user_schema_1.updateUserProfileSchema), user_controller_1.updateUserProfile);
+router.patch("/password", (0, validate_middleware_1.validate)(user_schema_1.updateUserPasswordSchema), user_controller_1.updateUserPassword);
 exports.default = router;
