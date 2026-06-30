@@ -10,7 +10,8 @@ export const jobIdSchema = z.object({
 
 export const getJobQuerySchema = z.object({
     query: z.object({
-        status: z.enum(allowStatuses).optional()
+        status: z.enum(allowStatuses).optional(),
+        search:z.string().optional()
     })
 })
 

@@ -7,13 +7,13 @@ import { jobsApi } from "@/lib/api";
 import { JobColumn } from "./job-column";
 import { Job } from "./job-card";
 
-export function JobsBoard() {
+export function JobsBoard({ searchQuery }: { searchQuery?: string }) {
   const queryClient = useQueryClient();
   const [localJobs, setLocalJobs] = useState<Job[]>([]);
-
+  // update the useQuery hook to include searchQuery in the queryKey and queryFn
   const { data, isLoading, isError } = useQuery({
-    queryKey: ["jobs"],
-    queryFn: () => jobsApi.getJobs(),
+    queryKey: ["jobs", searchQuery],
+    queryFn: () => jobsApi.getJobs({ search: searchQuery }),
   });
 
   // Sync local state when server data comes in
@@ -24,7 +24,7 @@ export function JobsBoard() {
   }, [data?.jobs]);
 
   const updateJobMutation = useMutation({
-    mutationFn: (vars: { id: number; status: string }) => 
+    mutationFn: (vars: { id: number; status: string }) =>
       jobsApi.updateJob({ id: vars.id, status: vars.status }),
     onSuccess: () => {
       // Invalidate queries quietly in the background
@@ -54,8 +54,8 @@ export function JobsBoard() {
     const newStatus = destination.droppableId as Job["status"];
 
     // Optimistically update local state
-    setLocalJobs((prev) => 
-      prev.map((job) => 
+    setLocalJobs((prev) =>
+      prev.map((job) =>
         job.id === jobId ? { ...job, status: newStatus } : job
       )
     );

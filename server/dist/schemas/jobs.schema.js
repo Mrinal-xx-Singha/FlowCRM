@@ -10,7 +10,8 @@ exports.jobIdSchema = zod_1.z.object({
 });
 exports.getJobQuerySchema = zod_1.z.object({
     query: zod_1.z.object({
-        status: zod_1.z.enum(allowStatuses).optional()
+        status: zod_1.z.enum(allowStatuses).optional(),
+        search: zod_1.z.string().optional()
     })
 });
 exports.createJobSchema = zod_1.z.object({

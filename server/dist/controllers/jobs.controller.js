@@ -29,7 +29,7 @@ const getJobs = async (req, res) => {
         if (!userId)
             return res.status(401).json({ message: "Unauthorized" });
         // Zod already validated this query parameter perfectly
-        const { status } = req.query;
+        const { status, search } = req.query;
         let jobQuery = `
       SELECT jobs.id, jobs.customer_id, jobs.title, jobs.description,jobs.status,jobs.due_date,jobs.created_at,jobs.updated_at,customers.name AS customer_name 
       FROM jobs JOIN customers ON jobs.customer_id = customers.id WHERE jobs.user_id = $1 
@@ -38,6 +38,10 @@ const getJobs = async (req, res) => {
         if (status) {
             jobQuery += ` AND jobs.status = $2 `;
             jobValues.push(status);
+        }
+        if (search) {
+            jobValues.push(`%${search}`);
+            jobQuery += ` AND (jobs.title ILIKE $${jobValues.length} OR customers.name ILIKE $${jobValues.length})`;
         }
         jobQuery += " ORDER BY jobs.created_at DESC";
         const result = await dbConnect_1.pool.query(jobQuery, jobValues);

@@ -34,7 +34,7 @@ export const getJobs = async (req: Request, res: Response) => {
     if (!userId) return res.status(401).json({ message: "Unauthorized" });
 
     // Zod already validated this query parameter perfectly
-    const { status } = req.query; 
+    const { status, search } = req.query;
 
     let jobQuery = `
       SELECT jobs.id, jobs.customer_id, jobs.title, jobs.description,jobs.status,jobs.due_date,jobs.created_at,jobs.updated_at,customers.name AS customer_name 
@@ -46,7 +46,11 @@ export const getJobs = async (req: Request, res: Response) => {
       jobQuery += ` AND jobs.status = $2 `;
       jobValues.push(status);
     }
-    
+    if (search) {
+      jobValues.push(`%${search}%`);
+      jobQuery += ` AND (jobs.title ILIKE $${jobValues.length} OR customers.name ILIKE $${jobValues.length})`;
+    }
+
     jobQuery += " ORDER BY jobs.created_at DESC";
     const result = await pool.query(jobQuery, jobValues);
 
@@ -97,7 +101,7 @@ export const updateJob = async (req: Request, res: Response) => {
 
     const jobQuery = `UPDATE jobs SET ${updates.join(", ")} WHERE id=$${values.length - 1} AND user_id =$${values.length} RETURNING *`;
     const result = await pool.query(jobQuery, values);
-    
+
     if (result.rows.length === 0) return res.status(404).json({ message: "Job not found" });
     return res.status(200).json({ job: result.rows[0] });
   } catch (error) {
@@ -112,7 +116,7 @@ export const deleteJob = async (req: Request, res: Response) => {
     if (!userId) return res.status(401).json({ message: "Unauthorized" });
 
     const result = await pool.query("DELETE FROM jobs WHERE id=$1 AND user_id=$2 RETURNING *", [jobId, userId]);
-    
+
     if (result.rows.length === 0) return res.status(404).json({ message: "Job not found" });
     return res.status(200).json({ message: "Job deleted successfully" });
   } catch (error) {

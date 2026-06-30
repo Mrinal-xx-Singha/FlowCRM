@@ -5,7 +5,7 @@ const zod_1 = require("zod");
 exports.updateUserProfileSchema = zod_1.z.object({
     body: zod_1.z.object({
         name: zod_1.z.string().min(1, "Name is required").trim(),
-        email: zod_1.z.string().email("Invalid email format").trim().toLowerCase(),
+        email: zod_1.z.email("Invalid email format").trim().toLowerCase(),
     }),
 });
 exports.updateUserPasswordSchema = zod_1.z.object({

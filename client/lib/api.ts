@@ -85,8 +85,8 @@ export const customerApi = {
 };
 
 export const jobsApi = {
-  getJobs: async (status?: string) => {
-    const response = await api.get("/api/jobs", { params: { status } });
+  getJobs: async (params?: { status?: string; search?: string }) => {
+    const response = await api.get("/api/jobs", { params });
     return response.data;
   },
   getJobById: async (id: number) => {
