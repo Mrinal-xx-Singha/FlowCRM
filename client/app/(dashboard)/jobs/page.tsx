@@ -32,13 +32,12 @@ export default function JobsPage() {
 
   return (
     <div className="flex h-[calc(100vh-6rem)] flex-col gap-6">
-      <div className="flex items-center justify-between shrink-0">
+      <div className="flex items-center justify-between shrink-0 flex-col md:flex-row gap-10">
         <div>
           <h1 className=" text-md md:text-2xl font-semibold tracking-tight">Jobs Board</h1>
           <p className="text-sm text-muted-foreground">Manage your deals and projects through the pipeline.</p>
         </div>
-
-        <div className="flex items-center gap-4 w-full sm:w-auto">
+        <div className="flex items-center gap-4 w-full sm:w-auto flex-col md:flex-row">
           <div className="relative w-full sm:w-64">
             <Search
               className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground"

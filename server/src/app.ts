@@ -14,7 +14,13 @@ import cronRoutes from "./routes/cron.route"
 import rateLimit from "express-rate-limit";
 
 const app = express();
-app.use(cors());
+app.set("trust proxy", 1); // Required for Render and rate limiting
+
+app.use(cors({
+  origin: process.env.FRONTEND_URL || "*", 
+  methods: ["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"]
+}));
 app.use(express.json());
 
 const globalLimiter = rateLimit({
