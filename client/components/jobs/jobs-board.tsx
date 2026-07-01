@@ -74,6 +74,21 @@ export function JobsBoard({ searchQuery }: { searchQuery?: string }) {
     return <div className="flex justify-center p-8 text-red-500">Failed to load jobs.</div>;
   }
 
+  if (localJobs.length === 0 && !isLoading) {
+    return (
+      <div className="flex h-100 w-full flex-col items-center justify-center rounded-xl border border-dashed bg-muted/40 text-muted-foreground">
+        <p className="text-lg font-medium text-foreground">
+          {searchQuery ? "No matching jobs found" : "No jobs yet"}
+        </p>
+        <p className="text-sm">
+          {searchQuery 
+            ? `We couldn't find anything matching "${searchQuery}".` 
+            : "Click 'Add Job' to create your first deal."}
+        </p>
+      </div>
+    );
+  }
+
   const pendingJobs = localJobs.filter((job) => job.status === "pending");
   const inProgressJobs = localJobs.filter((job) => job.status === "in_progress");
   const completedJobs = localJobs.filter((job) => job.status === "completed");
