@@ -20,7 +20,7 @@ export default function CustomersPage() {
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight">Customers</h1>
+          <h1 className="text-xl md:text-2xl font-semibold tracking-tight">Customers</h1>
           <p className="text-muted-foreground text-sm md:text-base">Manage your customers and leads.</p>
         </div>
         
@@ -28,7 +28,7 @@ export default function CustomersPage() {
           <DialogTrigger asChild>
             <Button>Add Customer</Button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-[425px]">
+          <DialogContent className="sm:sm:max-w-106.25">
             <DialogHeader>
               <DialogTitle>Add New Customer</DialogTitle>
               <DialogDescription>

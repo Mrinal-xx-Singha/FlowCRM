@@ -21,7 +21,7 @@ export default function RemindersPage() {
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between shrink-0">
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight">Reminders</h1>
+          <h1 className="text-xl md:text-2xl font-semibold tracking-tight">Reminders</h1>
           <p className="text-muted-foreground">Manage your tasks and follow-ups.</p>
         </div>
         

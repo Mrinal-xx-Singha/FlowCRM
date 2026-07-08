@@ -90,14 +90,14 @@ export function CustomerTable() {
       `"${(c.notes || '').replace(/"/g, '""')}"`
     ])
     // create it all into a single text block 
-    const csvContent = [headers.join(","),...rows.map(r=>r.join(","))].join("\n");
+    const csvContent = [headers.join(","), ...rows.map(r => r.join(","))].join("\n");
 
     // create an invisible download link and click it programmatically
-    const blob = new Blob([csvContent],{type:'text/csv;charset=utf8;'})
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf8;' })
     const link = document.createElement('a')
     const url = URL.createObjectURL(blob)
-    link.setAttribute('href',url)
-    link.setAttribute('download','customers_export.csv')
+    link.setAttribute('href', url)
+    link.setAttribute('download', 'customers_export.csv')
     link.style.visibility = 'hidden'
     document.body.appendChild(link)
     link.click()
@@ -106,25 +106,28 @@ export function CustomerTable() {
 
   return (
     <>
-    <div className="flex items-center justify-between mb-4">
-    {/* Search Bar */}
-      <div className="relative w-full mb-4 max-w-sm">
-        <Search
-          className="absolute left-3 top-1/2 w-4 h-4 -translate-y-1/2 text-muted-foreground"
-        />
-        <Input
-          placeholder="Search customers...."
-          className="pl-9 bg-card"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-        />
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-4">
+        {/* Search Bar */}
+        <div className="relative w-full  md:max-w-sm">
+          <Search
+            className="absolute left-3 top-1/2 w-4 h-4 -translate-y-1/2 text-muted-foreground"
+          />
+          <Input
+            placeholder="Search customers...."
+            className="pl-9 bg-card"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+        </div>
+        {/* CSV Download functionality */}
+        <Button variant="outline"
+          className="w-full md:ml-auto md:w-auto"
+          onClick={() => downloadCSV(filteredCustomers)}>
+          <Download className="mr-2 h-4 w-4" />
+          Download CSV
+        </Button>
       </div>
-      {/* CSV Download functionality */}
-      <Button variant="outline" onClick={()=>downloadCSV(filteredCustomers)}>
-        <Download className="mr-2 h-4 w-4"/>
-      </Button>
-          </div>
-      <div className="rounded-md border bg-card">
+      <div className="rounded-md border bg-card overflow-x-auto">
         <Table>
           <TableHeader>
             <TableRow>
