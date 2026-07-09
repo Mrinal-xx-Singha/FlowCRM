@@ -5,6 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { dashboardApi } from "@/lib/api";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Users, Briefcase, Clock, CheckCircle2, AlertCircle } from "lucide-react";
+import { PipelineChart } from "./pipeline-chart";
 
 export function DashboardSummary() {
   const { data, isLoading, isError } = useQuery<any>({
@@ -29,20 +30,28 @@ export function DashboardSummary() {
   ];
 
   return (
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
-      {metrics.map((metric) => (
-        <Card key={metric.title}>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">
-              {metric.title}
-            </CardTitle>
-            <metric.icon className={`h-4 w-4 ${metric.color}`} />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{metric.value || 0}</div>
-          </CardContent>
-        </Card>
-      ))}
+    <div className="flex flex-col gap-6">
+
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
+        {metrics.map((metric) => (
+          <Card key={metric.title}>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium text-muted-foreground">
+                {metric.title}
+              </CardTitle>
+              <metric.icon className={`h-4 w-4 ${metric.color}`} />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{metric.value || 0}</div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+      {/* new chart section */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <PipelineChart summaryData={data} />
+
+      </div>
     </div>
   );
 }
