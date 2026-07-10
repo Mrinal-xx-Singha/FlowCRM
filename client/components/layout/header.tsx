@@ -4,15 +4,18 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/auth";
-import { Menu, X } from "lucide-react";
+import { Menu, Moon, Sun, X } from "lucide-react";
 import { SidebarNav } from "./sidebar";
 import Image from "next/image";
 import crmLogo from "../../public/crm-logo.png";
+import { useTheme } from "next-themes";
 
 export function Header() {
   const router = useRouter();
   const { user, logout } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const { theme, setTheme } = useTheme()
 
   const handleLogout = () => {
     logout();
@@ -24,21 +27,36 @@ export function Header() {
       <header className="h-16 border-b bg-background flex items-center justify-between px-4 md:px-6">
         <div className="flex items-center gap-3">
           {/* Mobile Hamburger Button */}
-          <Button 
-            variant="ghost" 
-            size="icon" 
+          <Button
+            variant="ghost"
+            size="icon"
             className="md:hidden"
             onClick={() => setIsMobileMenuOpen(true)}
           >
             <Menu className="h-5 w-5" />
           </Button>
-          
+
           <div className="text-sm font-medium text-muted-foreground hidden sm:block">
             Welcome back, {user?.name || "User"}!
           </div>
         </div>
-        
+
         <div className="flex items-center gap-4">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setTheme(theme === "light" ? 'dark' : 'light')}
+          >
+            <Sun
+              className="h-5 w-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0"
+            />
+            <Moon
+              className="absolute h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100"
+            />
+            <span
+              className="sr-only"
+            >Toggle Theme</span>
+          </Button>
           <div className="w-8 h-8 rounded-full bg-muted border hidden sm:block"></div>
           <Button variant="outline" size="sm" onClick={handleLogout}>
             Logout
@@ -50,11 +68,11 @@ export function Header() {
       {isMobileMenuOpen && (
         <div className="fixed inset-0 z-100 md:hidden">
           {/* Backdrop */}
-          <div 
+          <div
             className="fixed inset-0 bg-black/50 backdrop-blur-sm transition-opacity"
             onClick={() => setIsMobileMenuOpen(false)}
           />
-          
+
           {/* Sliding Drawer */}
           <div className="fixed inset-y-0 left-0 w-3/4 max-w-sm bg-background border-r shadow-2xl animate-in slide-in-from-left duration-300 flex flex-col">
             <div className="h-16 border-b flex justify-between items-center px-4">
@@ -62,9 +80,9 @@ export function Header() {
                 <Image src={crmLogo} alt="Flow CRM Logo" width={28} height={28} className="rounded" />
                 <h2 className="text-lg font-bold tracking-tight">FlowCRM</h2>
               </div>
-              <Button 
-                variant="ghost" 
-                size="icon" 
+              <Button
+                variant="ghost"
+                size="icon"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 <X className="h-5 w-5" />
