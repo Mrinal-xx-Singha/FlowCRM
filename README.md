@@ -16,10 +16,11 @@ The UI is heavily inspired by modern, high-end SaaS platforms (like Cal.com) fea
 ## ✨ Core Features
 
 - **Visual Kanban Pipeline**: Drag and drop your jobs/projects across customizable stages (To Do, In Progress, Completed). Always know exactly where every project stands at a single glance.
-- **Customer Hub**: A centralized database to securely track every customer interaction. Features real-time, client-side search for instantaneous filtering.
+- **Customer Hub**: A centralized database to securely track every customer interaction. Features real-time, debounced search for instantaneous filtering and **Export to CSV** capabilities.
+- **Analytics Dashboard**: Interactive, animated charts built with Recharts to visualize your job pipeline and business productivity over time.
 - **Automated Background Reminders**: Set it and forget it. Background workers actively monitor your database and trigger alerts for pending jobs and due dates.
 - **Secure Authentication**: Built-in JWT authentication with encrypted passwords and 30-day "Remember Me" persistent sessions.
-- **Fully Responsive**: Beautifully optimized for desktop and mobile, featuring a custom animated sliding drawer for mobile navigation.
+- **Fully Responsive & Dark Mode**: Beautifully optimized for desktop and mobile devices with a full system-integrated Dark Mode toggle.
 - **Premium UI/UX**: Built with Tailwind v4 and Shadcn UI, customized to a stark, monochrome, minimalist aesthetic with subtle drop shadows and pixel-perfect padding.
 
 ## 🛠 Tech Stack
@@ -28,8 +29,9 @@ FlowCRM utilizes a separated Client/Server architecture for maximum scalability 
 
 **Frontend (Client)**
 - **Framework**: Next.js 15 (React 19)
-- **Styling**: Tailwind CSS v4
+- **Styling**: Tailwind CSS v4, Next-Themes (Dark Mode)
 - **Components**: Shadcn UI, Lucide Icons
+- **Charts**: Recharts
 - **Data Fetching**: React Query (@tanstack/react-query)
 - **Forms**: React Hook Form with Zod validation
 - **Typography**: Inter (configured with negative tracking for a geometric display feel)
@@ -41,6 +43,11 @@ FlowCRM utilizes a separated Client/Server architecture for maximum scalability 
 - **DB Driver**: `pg` (Node Postgres with connection pooling)
 - **Authentication**: JWT (JSON Web Tokens) & bcryptjs
 - **Testing**: Jest & Supertest (connected to isolated `crm_test` database)
+
+## 🌐 Live Production Deployment
+- **Frontend**: Hosted on [Vercel](https://vercel.com)
+- **Backend API**: Hosted on [Render](https://render.com)
+- **Database**: Serverless PostgreSQL hosted on [Neon](https://neon.tech)
 
 ## 🚀 Getting Started
 
