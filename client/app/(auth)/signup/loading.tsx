@@ -1,8 +1,9 @@
+import { Spinner } from "@/components/ui/spinner";
 
 const Loading = () => {
     return (
-        <div>Loading...</div>
-    );
-};
+        <Spinner size="lg" />
+    )
+}
 
 export default Loading;

@@ -23,6 +23,7 @@ import { CustomerForm } from "./customer-form";
 import Link from "next/link";
 import { Search, Download } from "lucide-react";
 import { Input } from "../ui/input";
+import { Spinner } from "@/components/ui/spinner";
 
 interface Customer {
   id: number;
@@ -73,7 +74,7 @@ export function CustomerTable() {
   })
 
   if (isLoading) {
-    return <div className="p-4 text-center">Loading customers...</div>;
+    return <Spinner size="lg" />;
   }
 
   if (isError) {

@@ -5,6 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { dashboardApi } from "@/lib/api";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Briefcase } from "lucide-react";
+import { Spinner } from "@/components/ui/spinner";
 
 export function RecentJobs() {
   const { data, isLoading, isError } = useQuery<any>({
@@ -18,7 +19,7 @@ export function RecentJobs() {
         <CardHeader>
           <CardTitle className="text-lg">Recent Jobs</CardTitle>
         </CardHeader>
-        <CardContent className="animate-pulse text-sm text-muted-foreground">Loading recent jobs...</CardContent>
+        <CardContent><Spinner /></CardContent>
       </Card>
     );
   }

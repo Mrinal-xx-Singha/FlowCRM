@@ -6,6 +6,7 @@ import { reminderApi } from "@/lib/api";
 import { Trash2, Bell, Calendar, User, Briefcase } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Spinner } from "@/components/ui/spinner";
 
 export function ReminderList() {
   const queryClient = useQueryClient();
@@ -32,7 +33,7 @@ export function ReminderList() {
     },
   });
 
-  if (isLoading) return <div className="p-8 text-center animate-pulse">Loading reminders...</div>;
+  if (isLoading) return <Spinner size="lg" />;
   if (isError) return <div className="p-8 text-center text-red-500">Failed to load reminders.</div>;
 
   const reminders = data?.reminders || [];

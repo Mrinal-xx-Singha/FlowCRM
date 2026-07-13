@@ -6,6 +6,7 @@ import { dashboardApi } from "@/lib/api";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Users, Briefcase, Clock, CheckCircle2, AlertCircle } from "lucide-react";
 import { PipelineChart } from "./pipeline-chart";
+import { Spinner } from "@/components/ui/spinner";
 
 export function DashboardSummary() {
   const { data, isLoading, isError } = useQuery<any>({
@@ -14,7 +15,7 @@ export function DashboardSummary() {
   });
 
   if (isLoading) {
-    return <div className="p-8 text-center text-muted-foreground animate-pulse">Loading analytics...</div>;
+    return <Spinner size="lg" />;
   }
 
   if (isError || !data) {

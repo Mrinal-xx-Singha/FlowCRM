@@ -6,6 +6,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { jobsApi } from "@/lib/api";
 import { JobColumn } from "./job-column";
 import { Job } from "./job-card";
+import { Spinner } from "@/components/ui/spinner";
 
 export function JobsBoard({ searchQuery }: { searchQuery?: string }) {
   const queryClient = useQueryClient();
@@ -67,7 +68,7 @@ export function JobsBoard({ searchQuery }: { searchQuery?: string }) {
   };
 
   if (isLoading && localJobs.length === 0) {
-    return <div className="flex justify-center p-8">Loading board...</div>;
+    return <Spinner size="lg" />;
   }
 
   if (isError) {

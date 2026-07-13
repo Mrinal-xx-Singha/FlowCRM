@@ -5,6 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { dashboardApi } from "@/lib/api";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Bell } from "lucide-react";
+import { Spinner } from "@/components/ui/spinner";
 
 export function UpcomingReminders() {
   const { data, isLoading, isError } = useQuery<any>({
@@ -18,7 +19,7 @@ export function UpcomingReminders() {
         <CardHeader>
           <CardTitle className="text-lg">Upcoming Reminders</CardTitle>
         </CardHeader>
-        <CardContent className="animate-pulse text-sm text-muted-foreground">Loading reminders...</CardContent>
+        <CardContent><Spinner /></CardContent>
       </Card>
     );
   }
