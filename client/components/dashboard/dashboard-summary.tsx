@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Users, Briefcase, Clock, CheckCircle2, AlertCircle } from "lucide-react";
 import { PipelineChart } from "./pipeline-chart";
 import { Spinner } from "@/components/ui/spinner";
+import { ProductivityChart } from "./productivity-chart";
 
 export function DashboardSummary() {
   const { data, isLoading, isError } = useQuery<any>({
@@ -51,7 +52,7 @@ export function DashboardSummary() {
       {/* new chart section */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <PipelineChart summaryData={data} />
-
+        <ProductivityChart summaryData={data} />
       </div>
     </div>
   );
