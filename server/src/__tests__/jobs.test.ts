@@ -61,4 +61,36 @@ describe("Jobs API Endpoints", () => {
 
     expect(res.status).toBe(401);
   });
+  
+  it("should fetch a list of jobs for the user",async()=>{
+    await request(app)
+    .post("/api/jobs")
+    .set("Authorization",`Bearer ${authToken}`)
+    .send({
+      customer_id:99,
+      title:"SEO Audit",
+      deal_value:15000,
+      status:"pending"
+    })
+    // Make a get request to fetch the users jobs
+    const res = await request(app)
+    .get("/api/jobs")
+    .set("Authorization",`Bearer ${authToken}`)
+
+    // Assert: Verify the server returns a 200ok and an array of jobs
+
+    expect(res.status).toBe(200)
+    expect(res.body).toHaveProperty("jobs")
+
+    // we expect at least 1 job because we just created "SEO Audit" (plus any from previous tests)
+
+    expect(res.body.jobs.length).toBeGreaterThan(0)
+
+    // Verify the data returned from the database includes the customer name (VIA SQL JOIN)
+    const seoJob = res.body.jobs.find((j:any)=>j.title === "SEO Audit")
+    expect(seoJob).toBeDefined()
+    expect(seoJob.customer_name).toBe("Test Corp")
+    expect(seoJob.deal_value).toBe(15000)
+
+  })
 });
