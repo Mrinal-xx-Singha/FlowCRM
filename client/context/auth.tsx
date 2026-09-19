@@ -11,6 +11,7 @@ type User = {
   type AuthContextType = {
   user: User | null;
   login: (email: string, password: string, rememberMe?: boolean) => Promise<void>;
+  googleLogin: (googleToken: string) => Promise<void>;
   logout: () => void;
   isLoading: boolean;
 }
@@ -44,13 +45,19 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setUser(response.data.user);
   }
 
+  const googleLogin = async (googleToken: string) => {
+    const response = await api.post('/auth/google', { token: googleToken });
+    document.cookie = `token=${response.data.token}; path=/; max-age=2592000`; // 30 days
+    setUser(response.data.user);
+  }
+
   const logout = () => {
     document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     setUser(null);
   }
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, isLoading }}>
+    <AuthContext.Provider value={{ user, login, googleLogin, logout, isLoading }}>
       {children}
     </AuthContext.Provider>
   )

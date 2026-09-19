@@ -11,4 +11,5 @@ const auth_schema_1 = require("../schemas/auth.schema");
 const router = (0, express_1.Router)();
 router.post("/register", auth_ratelimit_middleware_1.default, (0, validate_middleware_1.validate)(auth_schema_1.registerSchema), auth_controller_1.register);
 router.post("/login", auth_ratelimit_middleware_1.default, (0, validate_middleware_1.validate)(auth_schema_1.loginSchema), auth_controller_1.login);
+router.post("/google", auth_controller_1.googleLogin);
 exports.default = router;

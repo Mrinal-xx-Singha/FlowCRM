@@ -23,6 +23,7 @@ exports.createJobSchema = zod_1.z.object({
         due_date: zod_1.z.string().refine((date) => !Number.isNaN(Date.parse(date)), {
             message: "Invalid date format",
         }).optional(),
+        deal_value: zod_1.z.number().min(0).optional(),
     })
 });
 exports.updateJobSchema = zod_1.z.object({
@@ -36,5 +37,6 @@ exports.updateJobSchema = zod_1.z.object({
         due_date: zod_1.z.string().refine((date) => !Number.isNaN(Date.parse(date)), {
             message: "Invalid date format",
         }).optional(),
+        deal_value: zod_1.z.number().min(0).optional(),
     })
 });
