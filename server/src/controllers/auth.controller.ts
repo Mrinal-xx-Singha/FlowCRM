@@ -2,6 +2,65 @@ import { Request, Response } from "express";
 import { pool } from "../db/dbConnect";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { OAuth2Client } from "google-auth-library";
+
+// Initialize the client with the ID
+const googleClient= new OAuth2Client(process.env.GOOGLE_CLIENT_ID)
+
+export const googleLogin = async(req:Request,res:Response) =>{
+  try {
+    // The token sent from the frontend
+    const {token} = req.body
+
+// Verify the token with Google's Servers 
+    const ticket = await googleClient.verifyIdToken({
+      idToken:token,
+      audience:process.env.GOOGLE_CLIENT_ID
+    })
+
+    const payload =  ticket.getPayload()
+    if(!payload || !payload.email) return res.status(400).json({error:"Invalid Google Token"})
+
+      const email = payload.email
+      const name = payload.name || "Google User"
+      // Check if user already exists in DB
+      const userResult = await pool.query("SELECT * FROM users WHERE email=$1",[email])
+      let user = userResult.rows[0]
+      // If they dont exist, create an account for them automatically
+      if(!user){
+        // We generate a random impossible password since they login via Google
+        const randomPassword = Math.random().toString(36).slice(-10)
+        const hashedPassword =await bcrypt.hash(randomPassword,10)
+
+        const insertResult = await pool.query(
+          "INSERT INTO users(name,email,password_hash) VALUES($1,$2,$3) RETURNING *",
+          [name,email,hashedPassword]
+        )
+         user = insertResult.rows[0]
+      }
+
+
+      // Generate your normal JWT token
+      const jwtToken = jwt.sign({id:user.id,email:user.email},process.env.JWT_SECRET as string,{
+        expiresIn:'1d'
+      })
+
+      return res.status(200).json({token:jwtToken, user:{
+        id:user.id,
+        name:user.name,
+        email:user.email
+      }})
+
+
+  } catch (error) {
+    console.error("Google Auth Error",error)
+    return res.status(500).json({error:"Google authentication failed"})
+  }
+
+}
+
+
+
 
 export const register = async (req: Request, res: Response) => {
   try {

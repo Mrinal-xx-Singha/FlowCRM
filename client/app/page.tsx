@@ -55,51 +55,6 @@ export default function Home() {
         </div>
       </main>
 
-      {/* Features Grid */}
-      <section className="bg-card border-t border-border py-24">
-        <div className="container mx-auto px-6 max-w-6xl">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold tracking-tight mb-4">Everything you need to close the deal</h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">We stripped away the confusing corporate bloat to give you a CRM that feels lightweight, fast, and incredibly intuitive.</p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            {/* Feature 1 */}
-            <div className="bg-background border border-border rounded-2xl p-8 hover:shadow-md transition-shadow">
-              <div className="h-12 w-12 bg-primary/10 text-primary rounded-xl flex items-center justify-center mb-6">
-                <LayoutDashboard className="h-6 w-6" />
-              </div>
-              <h3 className="text-xl font-semibold mb-3">Visual Pipeline</h3>
-              <p className="text-muted-foreground leading-relaxed">
-                Drag and drop your jobs across a customizable Kanban board. Always know exactly where every project stands at a single glance.
-              </p>
-            </div>
-
-            {/* Feature 2 */}
-            <div className="bg-background border border-border rounded-2xl p-8 hover:shadow-md transition-shadow">
-              <div className="h-12 w-12 bg-primary/10 text-primary rounded-xl flex items-center justify-center mb-6">
-                <BellRing className="h-6 w-6" />
-              </div>
-              <h3 className="text-xl font-semibold mb-3">Automated Reminders</h3>
-              <p className="text-muted-foreground leading-relaxed">
-                Set it and forget it. Our background workers will automatically send you an email exactly when a client needs a follow-up.
-              </p>
-            </div>
-
-            {/* Feature 3 */}
-            <div className="bg-background border border-border rounded-2xl p-8 hover:shadow-md transition-shadow">
-              <div className="h-12 w-12 bg-primary/10 text-primary rounded-xl flex items-center justify-center mb-6">
-                <Users className="h-6 w-6" />
-              </div>
-              <h3 className="text-xl font-semibold mb-3">Customer Hub</h3>
-              <p className="text-muted-foreground leading-relaxed">
-                A centralized database to securely track every customer interaction, linked directly to your active jobs and pending reminders.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Footer */}
       <footer className="bg-foreground text-muted-foreground py-16 border-t border-border">
         <div className="container mx-auto px-6 text-center flex flex-col items-center">

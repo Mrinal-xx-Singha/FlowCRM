@@ -6,6 +6,7 @@ import * as z from "zod";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/auth";
+import { GoogleLogin } from "@react-oauth/google";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -34,7 +35,7 @@ const formSchema = z.object({
 
 export function LoginForm() {
   const router = useRouter();
-  const { login } = useAuth();
+  const { login, googleLogin } = useAuth();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -134,6 +135,36 @@ export function LoginForm() {
           </Button>
         
         </form>
+        
+        <div className="relative my-6"> 
+          <div className="absolute inset-0 flex items-center">
+            <span className="w-full border-t" />
+          </div>
+          <div className="relative flex justify-center text-xs uppercase">
+            <span className="bg-background px-2 text-muted-foreground">
+              Or continue with
+            </span>
+          </div>
+        </div>
+
+        <div className="flex justify-center w-full">
+          <GoogleLogin
+            onSuccess={async (credentialResponse) => {
+              if (!credentialResponse.credential) return;
+              try {
+                await googleLogin(credentialResponse.credential);
+                toast.success("Logged in with Google!");
+                router.push("/dashboard");
+              } catch (error: any) {
+                toast.error(error.response?.data?.error || "Failed to log in with Google");
+              }
+            }}
+            onError={() => {
+              toast.error("Google authentication failed");
+            }}
+          />
+        </div>
+
         <div className="mt-4 text-center text-sm">
           Don&apos;t have an account?{" "}
           <Link href="/signup" className="underline">
