@@ -7,6 +7,8 @@ import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { authApi } from "@/lib/api";
 import { toast } from "sonner";
+import { useAuth } from "@/context/auth"
+import { GoogleLogin } from "@react-oauth/google";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -33,6 +35,7 @@ const formSchema = z.object({
 
 export function SignupForm() {
   const router = useRouter();
+  const { googleLogin } = useAuth()
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -54,11 +57,11 @@ export function SignupForm() {
         localStorage.setItem("userName", data.name);
       }
       toast.success("Account created successfully!");
-      router.push("/");
+      router.push("/dashboard");
     },
     onError: (error: any) => {
       console.error("Signup failed:", error);
-      if (error.response?.status === 439) {
+      if (error.response?.status === 429) {
         toast.error("Too many signup attempts. Please try again later.");
         return;
       }
@@ -136,9 +139,41 @@ export function SignupForm() {
           <Button type="submit" className="w-full" disabled={signupMutation.isPending}>
             {signupMutation.isPending ? "Creating account..." : "Sign Up"}
           </Button>
-          <Button variant="outline" className="w-full" type="button">
-            Sign up with Google
-          </Button>
+
+          <div className="relative my-2">
+            <div className="absolute inset--0 flex items-center">
+              <span className="w-full border-t" />
+
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-card px-2 text-muted-foreground">
+                Or continue with
+              </span>
+            </div>
+
+          </div>
+
+          <div
+            className="flex justify-center w-full"
+          >
+            <GoogleLogin
+              onSuccess={async (credentialResponse) => {
+                if (!credentialResponse.credential) return
+                try {
+                  await googleLogin(credentialResponse.credential)
+                  toast.success("Account created with Google!")
+                  router.push("/dashboard")
+                } catch (error: any) {
+                  toast.error(error.response?.data?.error || "Google sign up failed")
+
+                }
+              }}
+              onError={() => {
+                toast.error("Google authentication failed")
+              }}
+            />
+          </div>
+
         </form>
         <div className="mt-4 text-center text-sm">
           Already have an account?{" "}
