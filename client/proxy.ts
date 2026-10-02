@@ -1,37 +1,33 @@
-import { NextResponse } from 'next/server'
-import type { NextRequest } from 'next/server'
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
 
 export function proxy(request: NextRequest) {
-  const token = request.cookies.get('token')?.value
-  const { pathname } = request.nextUrl
+  const token = request.cookies.get("token")?.value;
+  const { pathname } = request.nextUrl;
 
-  // 1. Define public paths that don't require a token
-  const isPublicPath = pathname === '/login' || pathname === '/signup' || pathname === '/' 
+  const publicPaths = ["/", "/login", "/signup"];
 
-  // 2. If no token and trying to access a private path -> Redirect to login
-  if (!token && !isPublicPath) {
-    return NextResponse.redirect(new URL('/login', request.url))
+  // If user is NOT logged in and trying to access a private route → redirect to /login
+  if (!token && !publicPaths.includes(pathname)) {
+    return NextResponse.redirect(new URL("/login", request.url));
   }
 
-  // 3. If token exists and trying to access login/signup -> Redirect to home
-  if (token && isPublicPath) {
-    return NextResponse.redirect(new URL('/dashboard', request.url))
+  // If user IS logged in and trying to access login/signup → redirect to /dashboard
+  if (token && (pathname === "/login" || pathname === "/signup")) {
+    return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 
-  // Allow the request to continue if none of the above conditions met
-  return NextResponse.next()
+  return NextResponse.next();
 }
 
-// 4. The Matcher: Tells Next.js which paths to run this middleware on
 export const config = {
   matcher: [
-    /*
-     * Match all request paths except for the ones starting with:
-     * - api (API routes)
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     */
-    '/((?!api|_next/static|_next/image|favicon.ico).*)',
+    "/dashboard/:path*",
+    "/customers/:path*",
+    "/jobs/:path*",
+    "/reminders/:path*",
+    "/settings/:path*",
+    "/login",
+    "/signup",
   ],
-}
+};
