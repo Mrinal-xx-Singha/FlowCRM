@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader } from "../ui/card"
 
 export function PipelineChart({ summaryData }: { summaryData: any }) {
     const data = [
-        { name: "To Do", jobs: summaryData?.pending_jobs || 0, color: "#cd5ei" },
+        { name: "To Do", jobs: summaryData?.pending_jobs || 0, color: "#6366f1" },
         { name: "In progress", jobs: summaryData?.in_progress_jobs || 0, color: "#f59e0b" },
         { name: "Completed", jobs: summaryData?.completed_jobs || 0, color: "#10b981" },
     ]
