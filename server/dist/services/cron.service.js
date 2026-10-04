@@ -11,7 +11,7 @@ const processReminders = async () => {
         // 2. Fetch pending reminders and lock them using FOR UPDATE SKIP LOCKED
         // This prevents any other concurrent worker from processing the exact same reminders
         const query = `
-                SELECT reminders.id, reminders.title, reminders.notes, customers.email 
+                SELECT reminders.id, reminders.title, reminders.notes, users.email 
                 FROM reminders 
                 JOIN customers ON reminders.customer_id = customers.id
                 WHERE reminders.status='pending' AND reminders.remind_at <= NOW()

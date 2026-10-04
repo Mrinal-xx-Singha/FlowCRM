@@ -10,7 +10,7 @@ describe("Auth Routes", () => {
   });
 
   describe("POST /auth/register", () => {
-    it("should return 400 if email is missing", async () => {
+    it("should return 500 if email is missing", async () => {
       const response = await request(app).post("/auth/register").send({
         name: "Test User",
         password: "password123",

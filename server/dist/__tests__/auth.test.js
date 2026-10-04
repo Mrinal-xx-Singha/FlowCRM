@@ -13,7 +13,7 @@ const globals_1 = require("@jest/globals");
         await dbConnect_1.pool.query("DELETE FROM users");
     });
     (0, globals_1.describe)("POST /auth/register", () => {
-        (0, globals_1.it)("should return 400 if email is missing", async () => {
+        (0, globals_1.it)("should return 500 if email is missing", async () => {
             const response = await (0, supertest_1.default)(app_1.default).post("/auth/register").send({
                 name: "Test User",
                 password: "password123",
