@@ -40,7 +40,7 @@ exports.updateReminderSchema = zod_1.z.object({
     body: zod_1.z.object({
         title: zod_1.z.string().min(1, "Title cannot be empty").trim().optional(),
         notes: zod_1.z.string().trim().optional().or(zod_1.z.literal("")),
-        status: zod_1.z.enum(allowedStatuses),
+        status: zod_1.z.enum(allowedStatuses).optional(),
         remind_at: zod_1.z.string().refine((date) => !Number.isNaN(Date.parse(date)), {
             message: "Invalid date format"
         }).optional()

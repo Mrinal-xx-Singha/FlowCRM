@@ -42,7 +42,7 @@ export const updateReminderSchema = z.object({
     body:z.object({
         title: z.string().min(1,"Title cannot be empty").trim().optional(),
         notes:z.string().trim().optional().or(z.literal("")),
-        status:z.enum(allowedStatuses),
+        status:z.enum(allowedStatuses).optional(),
         remind_at:z.string().refine((date)=>!Number.isNaN(Date.parse(date)),{
             message:"Invalid date format"
         }).optional()
