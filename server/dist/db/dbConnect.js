@@ -16,11 +16,14 @@ if (!connectionString) {
     console.error(`❌ ${isTestEnv ? 'TEST_DATABASE_URL' : 'DATABASE_URL'} is not defined in environment variables`);
     process.exit(1);
 }
+const isProduction = process.env.NODE_ENV === "production";
+const requireSSL = connectionString?.includes("sslmode=require") || isProduction;
 exports.pool = new Pool({
     connectionString,
-    ssl: {
-        rejectUnauthorized: false,
-    },
+    ssl: requireSSL ?
+        {
+            rejectUnauthorized: false,
+        } : false,
 });
 const connectDB = async () => {
     let client;
