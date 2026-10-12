@@ -10,8 +10,10 @@ import jobsRoutes from "./routes/jobs.route";
 import dashboardRoutes from "./routes/dashboard.route";
 import reminderRoutes from "./routes/reminder.route";
 import userRoutes from "./routes/user.route";
+import aiRoutes from "./routes/ai.route"
 import cronRoutes from "./routes/cron.route"
 import rateLimit from "express-rate-limit";
+
 
 const app = express();
 app.set("trust proxy", 1); // Required for Render and rate limiting
@@ -39,6 +41,7 @@ app.use(globalLimiter);
 app.use("/auth", authRoutes);
 app.use("/api", cronRoutes);
 app.use("/api", authMiddleware, userRoutes);
+app.use("/api",authMiddleware,aiRoutes)
 app.use("/api", authMiddleware, customerRoutes);
 app.use("/api", authMiddleware, jobsRoutes);
 app.use("/api", authMiddleware, reminderRoutes);
