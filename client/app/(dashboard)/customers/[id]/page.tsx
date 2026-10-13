@@ -9,6 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { AiEmailModal } from '@/components/ai/ai-email-modal';
 
 const CustomerDetailsPage = () => {
   const params = useParams();
@@ -19,13 +20,13 @@ const CustomerDetailsPage = () => {
     queryKey: ["customer", customerId],
     queryFn: () => customerApi.getCustomerById(Number(customerId))
   });
-  
+
   // Fetch jobs to show linked deals!
   const { data: jobData } = useQuery({
     queryKey: ["jobs"],
     queryFn: () => jobsApi.getJobs(),
   });
-  
+
   const customerData = customer?.customer;
   const linkedJobs = jobData?.jobs?.filter((j: any) => j.customer_id === Number(customerId)) || [];
 
@@ -45,8 +46,8 @@ const CustomerDetailsPage = () => {
 
   return (
     <div className="max-w-5xl flex flex-col gap-6 pb-12">
-      <Link 
-        href="/customers" 
+      <Link
+        href="/customers"
         className="inline-flex items-center text-sm font-medium text-muted-foreground hover:text-foreground transition-colors w-fit -ml-2 px-2 py-1"
       >
         <ArrowLeft className="mr-2 h-4 w-4" /> Back to Customers
@@ -55,7 +56,7 @@ const CustomerDetailsPage = () => {
       {/* Minimal SaaS Header (Cal.com Style) */}
       <div className="relative w-full rounded-2xl overflow-hidden border bg-card shadow-sm">
         <div className="h-24 w-full bg-slate-50 dark:bg-zinc-900 border-b"></div>
-        
+
         <div className="px-6 pb-6 sm:px-10 relative">
           <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-4 -mt-10">
             <div className="flex items-end gap-5">
@@ -73,10 +74,15 @@ const CustomerDetailsPage = () => {
                 </div>
               </div>
             </div>
-            
+
             <div className="flex gap-3 w-full sm:w-auto mt-2 sm:mt-0">
+              <AiEmailModal
+                customerId={customerData.id}
+                customerName={customerData.name}
+                customerEmail={customerData.email}
+              />
               <Button onClick={() => window.location.href = `mailto:${customerData.email}`} className="w-full sm:w-auto gap-2 bg-zinc-950 hover:bg-zinc-900 text-white dark:bg-zinc-50 dark:text-zinc-900 rounded-md">
-                <Mail className="w-4 h-4"/> Email
+                <Mail className="w-4 h-4" /> Email
               </Button>
             </div>
           </div>
@@ -90,7 +96,7 @@ const CustomerDetailsPage = () => {
           <TabsTrigger value="jobs" className="rounded-full">Active Deals ({linkedJobs.length})</TabsTrigger>
           <TabsTrigger value="notes" className="rounded-full">Notes</TabsTrigger>
         </TabsList>
-        
+
         <TabsContent value="overview" className="mt-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <Card className="shadow-none border bg-slate-50/50 dark:bg-zinc-900/50">
@@ -166,14 +172,14 @@ const CustomerDetailsPage = () => {
         <TabsContent value="notes" className="mt-6">
           <Card className="shadow-none border bg-slate-50/50 dark:bg-zinc-900/50">
             <CardContent className="pt-6">
-               <div className="flex items-start gap-4">
-                  <div className="w-full">
-                    <h3 className="text-sm font-semibold mb-2">Executive Notes</h3>
-                    <div className="text-sm text-foreground bg-white dark:bg-zinc-950 p-5 rounded-xl border min-h-32 whitespace-pre-wrap leading-relaxed">
-                      {customerData.notes || <span className="text-muted-foreground italic">No notes recorded.</span>}
-                    </div>
+              <div className="flex items-start gap-4">
+                <div className="w-full">
+                  <h3 className="text-sm font-semibold mb-2">Executive Notes</h3>
+                  <div className="text-sm text-foreground bg-white dark:bg-zinc-950 p-5 rounded-xl border min-h-32 whitespace-pre-wrap leading-relaxed">
+                    {customerData.notes || <span className="text-muted-foreground italic">No notes recorded.</span>}
                   </div>
-               </div>
+                </div>
+              </div>
             </CardContent>
           </Card>
         </TabsContent>

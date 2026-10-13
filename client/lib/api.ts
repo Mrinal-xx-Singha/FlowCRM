@@ -157,4 +157,11 @@ export const userApi = {
   },
 };
 
+export const aiApi = {
+  draftEmail:async (data:{customer_id:number,job_id?:number;tone?:"professional" | "friendly" | "urgent"}) =>{
+    const response= await api.post("/api/ai/draft-email",data)
+    return response.data
+  }
+}
+
 export default api;
