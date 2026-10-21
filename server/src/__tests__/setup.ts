@@ -26,5 +26,5 @@ beforeAll(async () => {
 
 afterAll(async () => {
   // Disconnect from the pool after all test suites are done so Jest can exit cleanly
-  await pool.end();
+  // Note: Jest has forceExit: true in jest.config.js to cleanly exit
 });

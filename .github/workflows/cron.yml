@@ -14,6 +14,6 @@ jobs:
     steps:
       - name: Send Auth Ping to Live API
         run: |
-          curl -f -i -X POST "${{ secrets.RENDER_BACKEND_URL }}/api/cron/reminders" \
+          curl -f -i --retry 3 --retry-delay 5 --max-time 45 -X POST "${{ secrets.RENDER_BACKEND_URL }}/api/cron/reminders" \
           -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
           -H "Content-Type: application/json"
