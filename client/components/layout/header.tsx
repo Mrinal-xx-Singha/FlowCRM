@@ -85,7 +85,18 @@ export function Header() {
               className="sr-only"
             >Toggle Theme</span>
           </Button>
-          <div className="w-8 h-8 rounded-full bg-muted border hidden sm:block"></div>
+         {user?.avatar_url ? (
+          <img 
+          src={user.avatar_url}
+          alt={user.name || "User Avatar"}
+          className="w-8 h-8 rounded-full object-cover border hidden sm:block"
+          referrerPolicy="no-referrer"
+          />
+         ):(
+           <div className="w-8 h-8 rounded-full bg-muted border hidden sm:flex items-center justify-center text-xs font-semibold uppercase text-muted-foreground">
+    {user?.name ? user.name.charAt(0) : "U"}
+  </div>
+         )}
           <Button variant="outline" size="sm" onClick={handleLogout}>
             Logout
           </Button>
