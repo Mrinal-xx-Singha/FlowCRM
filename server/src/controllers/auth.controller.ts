@@ -23,9 +23,15 @@ export const googleLogin = async(req:Request,res:Response) =>{
 
       const email = payload.email
       const name = payload.name || "Google User"
+      const avatar_url = payload.picture;
       // Check if user already exists in DB
       const userResult = await pool.query("SELECT * FROM users WHERE email=$1",[email])
       let user = userResult.rows[0]
+
+      if(user && avatar_url && user.avatar_url !== avatar_url){
+        await pool.query("UPDATE users SET avatar_url = $1 WHERE id = $2",[avatar_url,user.id])
+        user.avatar_url = avatar_url
+      }
       // If they dont exist, create an account for them automatically
       if(!user){
         // We generate a random impossible password since they login via Google
@@ -33,8 +39,8 @@ export const googleLogin = async(req:Request,res:Response) =>{
         const hashedPassword =await bcrypt.hash(randomPassword,10)
 
         const insertResult = await pool.query(
-          "INSERT INTO users(name,email,password_hash) VALUES($1,$2,$3) RETURNING *",
-          [name,email,hashedPassword]
+          "INSERT INTO users(name,email,password_hash,avatar_url) VALUES($1,$2,$3,$4) RETURNING *",
+          [name,email,hashedPassword,avatar_url]
         )
          user = insertResult.rows[0]
       }
@@ -48,7 +54,8 @@ export const googleLogin = async(req:Request,res:Response) =>{
       return res.status(200).json({token:jwtToken, user:{
         id:user.id,
         name:user.name,
-        email:user.email
+        email:user.email,
+        avatar_url:user.avatar_url
       }})
 
 

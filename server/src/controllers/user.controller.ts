@@ -8,12 +8,12 @@ export const getCurrentUser = async (req: Request, res: Response) => {
         if (!userId) {
             return res.status(401).json({ message: "Unauthorized" });
         }
-        const userQuery = await pool.query(`SELECT id, name, email FROM users WHERE id = $1`, [userId]);
+        const userQuery = await pool.query(`SELECT id, name, email , avatar_url FROM users WHERE id = $1`, [userId]);
         const user = userQuery.rows[0];
         if (!user) {
             return res.status(404).json({ message: "User not found" });
         }
-        return res.json({ id: user.id, name: user.name, email: user.email });
+        return res.json({ id: user.id, name: user.name, email: user.email, avatar_url:user.avatar_url });
     } catch (error) {
         console.log(error);
         return res.status(500).json({ message: "Internal server error" });

@@ -32,6 +32,7 @@ export const connectDB = async () => {
   try {
     client = await pool.connect();
     await client.query("SELECT 1");
+    await client.query("ALTER TABLE users ADD COLUMN IF NOT EXISTS avatar_url TEXT;")
     console.log("✅ PostgreSQL connected");
   } catch (error) {
     console.error("❌ PostgreSQL connection failed", error);
