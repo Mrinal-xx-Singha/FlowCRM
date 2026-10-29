@@ -1,29 +1,35 @@
 <div align="center">
   <h1 align="center">⚡ FlowCRM</h1>
   <p align="center">
-    <strong>A premium, lightning-fast Customer Relationship Management platform built for small business simplicity.</strong>
+    <strong>A modern, full-stack B2B Customer Relationship Management platform engineered for simplicity, speed, and real-world scale.</strong>
   </p>
 
   <p align="center">
-    <a href="https://github.com/mrinal/crm-mvp/actions"><img src="https://img.shields.io/badge/CI%2FCD-GitHub_Actions_Enabled-10b981?style=for-the-badge&logo=githubactions&logoColor=white" alt="CI/CD Status"></a>
-    <img src="https://img.shields.io/badge/Next.js_15-000000?style=for-the-badge&logo=next.js&logoColor=white" alt="Next.js">
+    <a href="https://github.com/Mrinal-xx-Singha/FlowCRM/actions"><img src="https://img.shields.io/badge/CI%2FCD-Passing-10b981?style=for-the-badge&logo=githubactions&logoColor=white" alt="CI/CD Status"></a>
+    <img src="https://img.shields.io/badge/Next.js_16-000000?style=for-the-badge&logo=next.js&logoColor=white" alt="Next.js 16">
+    <img src="https://img.shields.io/badge/React_19-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="React 19">
     <img src="https://img.shields.io/badge/Tailwind_CSS_v4-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind CSS">
     <img src="https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript">
     <img src="https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL">
+    <img src="https://img.shields.io/badge/Google_Gemini-8E75C4?style=for-the-badge&logo=googlegemini&logoColor=white" alt="Gemini AI">
     <img src="https://img.shields.io/badge/License-MIT-F7DF1E?style=for-the-badge" alt="License MIT">
+  </p>
+
+  <p align="center">
+    <a href="https://flow-crm-eight.vercel.app"><strong>🌐 Explore Live Production App »</strong></a>
   </p>
 </div>
 
 > [!NOTE]
-> ⭐ **Enjoying FlowCRM? Please consider giving this repo a star on GitHub!** It helps increase visibility and supports open-source development! 🚀
+> ⭐ **Enjoying FlowCRM? Please consider starring the repository on GitHub!** It supports open-source development and helps increase visibility. 🚀
 
 ---
 
 ## 🎨 Overview
 
-**FlowCRM** strips away unnecessary corporate bloat to deliver a lightweight, high-performance sales and relationship tracker. Inspired by modern SaaS titans (like Linear and Cal.com), the design emphasizes a stark, geometric typography system, high-contrast monochrome UI themes, and frictionless interactivity.
+**FlowCRM** is a production-ready sales and pipeline management platform engineered with modern SaaS architecture principles. Built with a Cal.com and Linear-inspired monochrome design system, it pairs frictionless drag-and-drop interactivity with deep backend reliability: concurrency-safe background cron processing, automated AI email drafting, strict schema boundaries, edge network routing, and continuous integration testing.
 
-### 🖼️ Preview & Screenshots
+### 🖼️ Preview & UI Highlights
 
 <p align="center">
   <img width="1839" height="902" alt="Dashboard View" src="https://github.com/user-attachments/assets/d3a6bf57-cf28-4c19-989c-3cfb761ac944" />
@@ -35,77 +41,111 @@
 
 ---
 
-## 🚀 What's New: Latest Superpowers
+## 🚀 Key Features
 
-- **📊 Productivity Area Chart**: Beautiful Recharts visualization powered by PostgreSQL time-series queries (`DATE_TRUNC`) to showcase completed job trends over the last 6 months with custom emerald gradients.
-- **✨ Sonner Toast Notifications**: Replaced interruptive native browser alerts with fluid, animated slide-in toasts across all database mutations (with extra 🎯 feedback when crossing off completed reminders!).
-- **⚙️ Automated CI/CD Pipelines**: Integrated GitHub Actions workflows that boot up cloud runners on every push and pull request to verify zero TypeScript errors across both Client and Server.
-- **🔄 Centralized UI Loading Experience**: Custom animated SVG spinners integrated seamlessly across all authentication views, data tables, dashboards, and Kanban boards.
-- **🌙 System-Integrated Dark Mode & Export to CSV**: Smooth theme transitions via `next-themes` (with zero SSR hydration flicker) plus one-click `.csv` backup generation for your entire client roster!
+### 1. 🤖 AI-Powered Follow-up Email Drafter
+- Integrated with **Google Gemini 2.5 Flash** (`gemini-2.5-flash`) via structured JSON schema generation.
+- Analyzes individual customer notes, deal status, and deal values (₹ INR) to draft tailored, human-sounding sales follow-ups in seconds.
+- Multi-tone customization (*Professional*, *Friendly*, *Urgent*) with one-click clipboard copying and direct mail client integration.
 
----
+### 2. 🔐 Dual-Layer Authentication & Google OAuth 2.0
+- **Email & Password**: Salted password hashing (Bcrypt, 10 rounds) with customizable JWT expirations (1-day standard, 30-day "Remember Me").
+- **Google OAuth 2.0**: Backend token validation via `google-auth-library` (`verifyIdToken`) with automatic account provisioning, persistent `avatar_url` synchronization, and dynamic navbar profile image rendering.
+- **Edge Route Protection**: Migrated to Next.js 16's modern **`proxy.ts`** network boundary convention to inspect session cookies and eliminate unauthenticated UI flashes.
 
-## 🧩 Core Capabilities
+### 3. 📊 Visual Kanban Pipeline & Revenue Tracking
+- Drag-and-drop deal board powered by `@hello-pangea/dnd` across 3 active stages: *To Do*, *In Progress*, and *Completed*.
+- **Optimistic UI Updates**: State changes reflect immediately in the interface and revert automatically if backend synchronization encounters an error.
+- **Deal Value Tracking (₹ INR)**: Track flat Indian Rupee deal sizes per job, dynamically aggregated into pipeline revenue charts.
+- 300ms debounced live search querying titles and customer relationships simultaneously.
 
-1. **Interactive Kanban Pipeline**
-   - Effortless drag-and-drop workflow powered by `@hello-pangea/dnd`.
-   - Track active jobs through custom stages (Pending, In Progress, Completed) with live status updates.
-2. **Customer Relationship Hub**
-   - Centralized database with debounced, instantaneous search across names, phone numbers, and emails.
-   - Comprehensive detail profiles displaying connected jobs and notes.
-3. **Automated Reminders & Workers**
-   - Background chron jobs continuously monitor due dates and flag overdue follow-ups in red.
-   - Interactive checkbox checking with instant cache invalidation across widgets.
-4. **Security & Performance**
-   - Hardened API powered by Zod schema validation, CORS security policies, and rate limiting (configured with proxy trust for secure serverless hosting).
-   - JWT sessions with salted `bcrypt` password encryption.
+### 4. ⏰ Concurrency-Safe Automated Reminders & Cron
+- Scheduled client follow-up alerts with future date enforcement (`remind_at > NOW()`).
+- **Race-Condition Prevention**: Database transactions utilize PostgreSQL's **`FOR UPDATE SKIP LOCKED`** to prevent concurrent worker instances from sending duplicate emails.
+- **HTML Email Dispatch via Resend**: High-contrast, responsive HTML templates sent via Resend's REST API over port 443 (avoiding cloud SMTP port blocking).
+- **Automated Keep-Alive Cron**: GitHub Actions workflow pings the secure cron endpoint every 10 minutes to process due reminders and prevent cloud instances from sleeping.
+
+### 5. 📈 Analytics Dashboard & Spotlight Search
+- **Visual Analytics**: Interactive Recharts widgets displaying a 6-month completed job productivity area chart (`DATE_TRUNC`), stage distribution bar charts, and total pipeline deal revenue in INR.
+- **Global Command Menu (`⌘K` / `Ctrl+K`)**: Powered by `cmdk`. Instantly search across cached customers and deals, trigger theme toggles, and jump across dashboard routes without taking hands off the keyboard.
+- **One-Click CSV Export**: Client-side RFC-compliant CSV exporter for your entire customer directory.
 
 ---
 
 ## 🛠 Tech Stack & Architecture
 
-FlowCRM is structured as a scalable monorepo separating frontend presentation from backend persistence.
+FlowCRM is designed as a decoupled, type-safe monorepo separating presentation from backend persistence.
 
 ### 🌐 Frontend (Client)
-- **Framework**: Next.js 15 (React 19, App Router)
-- **Styling**: Tailwind CSS v4 & Next-Themes (Dark Mode)
-- **UI & Animation**: Shadcn UI, Lucide Icons, Sonner (Toasts)
+- **Framework**: Next.js 16.2 (App Router, Turbopack, React 19)
+- **Styling**: Tailwind CSS v4 & Next-Themes (Dark/Light mode with zero SSR flicker)
+- **Components & Icons**: Radix UI primitives, Shadcn UI, Lucide Icons, Sonner (Toasts)
 - **Visualizations**: Recharts (Responsive bar & area data series)
-- **State Management**: React Query (`@tanstack/react-query`) with optimistic UI cache updates
-- **Forms & Schema Validation**: React Hook Form + Zod
+- **State & Data Fetching**: TanStack React Query v5 (cache invalidation & optimistic updates)
+- **Forms & Validation**: React Hook Form + Zod v4
 - **Drag & Drop**: `@hello-pangea/dnd`
+- **Command Palette**: `cmdk`
+- **OAuth**: `@react-oauth/google`
 
 ### ⚙️ Backend (Server)
-- **Framework**: Node.js & Express.js (TypeScript)
-- **Database**: PostgreSQL (Serverless via Neon)
-- **ORM / Drivers**: `pg` (Node Postgres with production connection pooling)
-- **Authentication**: JWT & Bcrypt password security
-- **CI/CD Automation**: GitHub Actions (`ci.yml` pipeline)
-- **Testing Suite**: Jest & Supertest (connected to isolated testing database environments)
+- **Runtime & Framework**: Node.js & Express.js (TypeScript)
+- **Database**: PostgreSQL (Raw SQL queries with connection pooling via `pg`)
+- **LLM Engine**: Google Gemini 2.5 Flash API (Structured JSON output mode)
+- **Email Delivery**: Resend REST API
+- **Task Scheduling**: `node-cron` (local development) & GitHub Actions worker (production)
+- **Security & Middlewares**: Dual rate limiters (`express-rate-limit`), CORS policies, Zod schema validation
+- **Testing**: Jest & Supertest against an isolated PostgreSQL container (`--runInBand`)
+- **Auto-Migrations**: Non-destructive `IF NOT EXISTS` database schema migrations on server boot
 
 ---
 
-## 🌍 Live Production Stack
+## 🌍 Production Architecture
 
-| Component | Host Platform | Link |
-| :--- | :--- | :--- |
-| **Frontend Application** | Vercel | [Vercel Deployment](https://vercel.com) |
-| **Backend REST API** | Render | [Render Container](https://render.com) |
-| **Database Cluster** | Neon Serverless | [Neon PostgreSQL](https://neon.tech) |
-| **CI/CD Runner** | GitHub Actions | [Automated Workflow](https://github.com/features/actions) |
+```mermaid
+flowchart LR
+    User["Client Browser / Mobile"] --> CDN["Vercel Edge Network (Next.js 16)"]
+    CDN --> Proxy["Edge Proxy Layer (proxy.ts)"]
+    Proxy --> Frontend["Next.js App Router (React 19)"]
+    Frontend -- "REST API (JWT Auth)" --> API["Express.js Server (Render)"]
+    API -- "Pool Queries (SSL)" --> DB[("PostgreSQL Database (Neon)")]
+    API -- "AI Prompts (JSON)" --> Gemini["Google Gemini 2.5 Flash"]
+    API -- "HTTPS Port 443" --> Resend["Resend Email API"]
+    GHA["GitHub Actions Cron"] -- "Bearer CRON_SECRET" --> API
+```
+
+---
+
+## 🧪 Testing & CI/CD Pipeline
+
+FlowCRM maintains automated integration testing and continuous deployment checks on every commit:
+
+### 1. Isolated Integration Test Suite
+Our backend uses Supertest and Jest to interact with a dedicated test database (`crm_test`), executing clean schema builds before each suite to guarantee idempotent results:
+```bash
+cd server
+npm test
+```
+*Tests run sequentially with `--runInBand` to prevent database race conditions across test runners.*
+
+### 2. GitHub Actions CI Pipeline (`ci.yml`)
+Every push or pull-request triggers a workflow that:
+1. Spins up a real **PostgreSQL 15 Alpine** service container with Docker health checks.
+2. Runs the complete backend Jest + Supertest integration test suite against the container.
+3. Performs strict `tsc` compiler checks across the backend codebase.
+4. Validates package-lock integrity (`npm ci`) and builds the Next.js production bundle.
 
 ---
 
 ## ⚡ Getting Started Locally
 
-Follow these quick steps to spin up the entire full-stack app on your machine in under 5 minutes.
+Get a local copy running in under 5 minutes:
 
 ### Prerequisites
-- **Node.js** (v18 or higher)
-- **PostgreSQL** installed and running on default port `5432`
+- **Node.js** (v20 or higher recommended)
+- **PostgreSQL** running on port `5432`
 
-### 1. Database Configuration
-Open terminal and create the local databases for development and test execution:
+### 1. Database Setup
+Create your local development and test databases:
 ```bash
 psql -U postgres
 CREATE DATABASE crm;
@@ -113,71 +153,75 @@ CREATE DATABASE crm_test;
 ```
 
 ### 2. Backend Server Setup
-Navigate into the server folder, install dependencies, and setup environment variables:
 ```bash
 cd server
 npm install
 ```
+
 Create a `.env` file inside `./server`:
 ```env
 PORT=5000
-DATABASE_URL=postgres://postgres:password@localhost:5432/crm
-TEST_DATABASE_URL=postgres://postgres:password@localhost:5432/crm_test
+DATABASE_URL=postgresql://postgres:password@localhost:5432/crm
+TEST_DATABASE_URL=postgresql://postgres:password@localhost:5432/crm_test
 JWT_SECRET=your_super_secret_jwt_key
+GOOGLE_CLIENT_ID=your_google_oauth_client_id.apps.googleusercontent.com
+GEMINI_API_KEY=your_gemini_api_key_from_google_ai_studio
+RESEND_API_KEY=your_resend_api_key
+CRON_SECRET=your_custom_cron_secret
 ```
-Launch the TypeScript dev server:
+
+Start the backend:
 ```bash
 npm run dev
 ```
-*(Server will listen on `http://localhost:5000` and auto-initialize tables upon startup).*
+*(The server listens on `http://localhost:5000` and automatically runs schema migrations).*
 
 ### 3. Frontend Next.js Setup
-Open a second terminal window, navigate into the client folder, install packages, and launch:
+Open a second terminal window:
 ```bash
 cd client
 npm install
+```
+
+Create a `.env` file inside `./client`:
+```env
+NEXT_PUBLIC_API_URL=http://localhost:5000
+NEXT_PUBLIC_GOOGLE_CLIENT_ID=your_google_oauth_client_id.apps.googleusercontent.com
+```
+
+Start the client:
+```bash
 npm run dev
 ```
-Open **[http://localhost:3000](http://localhost:3000)** in your browser to view the app! 🎉 Create an account on the sign-up page to populate your fresh CRM dashboard.
+
+Open **[http://localhost:3000](http://localhost:3000)** in your browser! 🎉
 
 ---
 
-## 🧪 Testing & CI/CD Pipeline
+## 🧠 Key Engineering Learnings
 
-FlowCRM is backed by robust testing and automation:
+### 1. Concurrency Control with `FOR UPDATE SKIP LOCKED`
+When multiple server workers or scheduled crons execute simultaneously, naive `SELECT ... WHERE remind_at <= NOW()` queries create race conditions, leading to duplicate customer emails.
+* **Solution**: Handled reminder queries inside an explicit PostgreSQL transaction using `FOR UPDATE SKIP LOCKED`. This locks only the rows being processed by that worker and allows any concurrent threads to skip them without blocking.
 
-### Running Automated API Tests
-Our backend uses Supertest and Jest to interact with the isolated `crm_test` schema—wiping tables cleanly before each transaction to guarantee idempotent results:
-```bash
-cd server
-npm run test
-```
+### 2. Migrating to Next.js 16's Edge Network Proxy (`proxy.ts`)
+In Next.js 16, the legacy `middleware.ts` convention was renamed to `proxy.ts` to establish a clearer distinction between Express-style request middleware and edge network routing proxies.
+* **Solution**: Structured `client/proxy.ts` with `export function proxy(request: NextRequest)` and strict route matchers, verifying the `token` cookie before rendering private routes to eliminate client-side authentication flicker.
 
-### GitHub Actions CI/CD Architecture
-Every commit pushed or pull-request created against the `main` branch automatically boots an Ubuntu runner via `.github/workflows/ci.yml`. The runner verifies package lock integrity (`npm ci`), builds Next.js pages, and executes TypeScript compiler checks across both client and server monorepo targets to protect production deployment integrity.
-
----
-
-## 🧠 Engineering Insights & Learnings
-
-### 1. Bypassing Express Read-Only `IncomingMessage` Getter During Zod Validation
-When implementing centralized middleware to replace raw query strings with Zod sanitized inputs, Express threw a strict error: `TypeError: Cannot set property query of #<IncomingMessage> which has only a getter`. 
-* **Solution**: Express defines `req.query` as a lazy read-only property under the hood. We solved this by utilizing `Object.defineProperty(req, "query", { value: parsedData.query, writable: true })`, cleanly injecting verified data down the Express middleware chain without breaking internal getters.
-
-### 2. Eliminating Next.js SSR Theme Hydration Flicker
-When utilizing Tailwind CSS with dynamic dark mode styling, React hydration crashed with class mismatch warnings due to `next-themes` injecting class attributes on the client before hydration completed.
-* **Solution**: Configured the document root with `<html lang="en" suppressHydrationWarning>` inside `layout.tsx`, instructing Next.js to cleanly accommodate runtime theme attributes without re-rendering layout jumps.
+### 3. Google Avatar Cross-Origin Policy Resolution
+Google's user profile photo CDN (`lh3.googleusercontent.com`) automatically rejects image requests with `403 Forbidden` if third-party referrer headers are transmitted.
+* **Solution**: Injected `referrerPolicy="no-referrer"` on user avatar components across the application, guaranteeing Google profile photos load seamlessly without cross-origin rejection.
 
 ---
 
-## 🤝 Contributing
+## 🤝 Contributing & Feedback
 
-Contributions, feature requests, and issue suggestions are warmly welcomed! Feel free to fork this repository, open a pull request, or submit an issue.
+Contributions, feature requests, and suggestions are welcome! Feel free to fork the repository, open an issue, or submit a pull request.
 
 ## 📄 License
-This project is open-source and released under the **MIT License**.
+This project is open-source and released under the **[MIT License](LICENSE)**.
 
 ---
 <p align="center">
-  Built with ❤️ and Modern TypeScript. Don't forget to ⭐ star the repo if you found it useful!
+  Built with ❤️ and Modern TypeScript. If you find this project valuable, please consider giving it a ⭐ star!
 </p>
