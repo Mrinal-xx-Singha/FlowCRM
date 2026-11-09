@@ -11,8 +11,6 @@ export const draftEmailHandler = async (req: Request, res: Response) => {
         const customerRes = await pool.query("SELECT name,notes,email FROM customers WHERE id =$1 AND user_id =$2", [customer_id, userId])
         if (customerRes.rows.length === 0) {
             return res.status(404).json({ error: "Customer not found" })
-
-
         }
         const customer = customerRes.rows[0]
 
