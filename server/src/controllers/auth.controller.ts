@@ -4,67 +4,82 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { OAuth2Client } from "google-auth-library";
 
-// Initialize the client with the ID
-const googleClient= new OAuth2Client(process.env.GOOGLE_CLIENT_ID)
+// Initialize the OAuth2 client
+const googleClient = new OAuth2Client();
 
-export const googleLogin = async(req:Request,res:Response) =>{
+export const googleLogin = async (req: Request, res: Response) => {
   try {
-    // The token sent from the frontend
-    const {token} = req.body
+    const { token } = req.body;
+    const clientId = process.env.GOOGLE_CLIENT_ID;
 
-// Verify the token with Google's Servers 
+    if (!clientId) {
+      console.error("Google Auth Error: GOOGLE_CLIENT_ID is not configured in server environment variables");
+      return res.status(500).json({ error: "GOOGLE_CLIENT_ID is not configured on the server" });
+    }
+
+    if (!token) {
+      return res.status(400).json({ error: "No Google token provided" });
+    }
+
+    // Verify the token with Google's Servers
     const ticket = await googleClient.verifyIdToken({
-      idToken:token,
-      audience:process.env.GOOGLE_CLIENT_ID
-    })
+      idToken: token,
+      audience: clientId,
+    });
 
-    const payload =  ticket.getPayload()
-    if(!payload || !payload.email) return res.status(400).json({error:"Invalid Google Token"})
+    const payload = ticket.getPayload();
+    if (!payload || !payload.email) {
+      return res.status(400).json({ error: "Invalid Google Token" });
+    }
 
-      const email = payload.email
-      const name = payload.name || "Google User"
-      const avatar_url = payload.picture;
-      // Check if user already exists in DB
-      const userResult = await pool.query("SELECT * FROM users WHERE email=$1",[email])
-      let user = userResult.rows[0]
+    const email = payload.email.toLowerCase().trim();
+    const name = payload.name || "Google User";
+    const avatar_url = payload.picture || null;
 
-      if(user && avatar_url && user.avatar_url !== avatar_url){
-        await pool.query("UPDATE users SET avatar_url = $1 WHERE id = $2",[avatar_url,user.id])
-        user.avatar_url = avatar_url
+    // Check if user already exists in DB
+    const userResult = await pool.query("SELECT * FROM users WHERE email = $1", [email]);
+    let user = userResult.rows[0];
+
+    if (user) {
+      if (avatar_url && user.avatar_url !== avatar_url) {
+        await pool.query("UPDATE users SET avatar_url = $1 WHERE id = $2", [avatar_url, user.id]);
+        user.avatar_url = avatar_url;
       }
-      // If they dont exist, create an account for them automatically
-      if(!user){
-        // We generate a random impossible password since they login via Google
-        const randomPassword = Math.random().toString(36).slice(-10)
-        const hashedPassword =await bcrypt.hash(randomPassword,10)
+    } else {
+      // If they don't exist, create an account for them automatically
+      const randomPassword = Math.random().toString(36).slice(-10);
+      const hashedPassword = await bcrypt.hash(randomPassword, 10);
 
-        const insertResult = await pool.query(
-          "INSERT INTO users(name,email,password_hash,avatar_url) VALUES($1,$2,$3,$4) RETURNING *",
-          [name,email,hashedPassword,avatar_url]
-        )
-         user = insertResult.rows[0]
-      }
+      const insertResult = await pool.query(
+        "INSERT INTO users(name, email, password_hash, avatar_url) VALUES($1, $2, $3, $4) RETURNING *",
+        [name, email, hashedPassword, avatar_url]
+      );
+      user = insertResult.rows[0];
+    }
 
+    // Generate JWT token
+    const jwtToken = jwt.sign(
+      { id: user.id, email: user.email },
+      process.env.JWT_SECRET as string,
+      { expiresIn: "1d" }
+    );
 
-      // Generate your normal JWT token
-      const jwtToken = jwt.sign({id:user.id,email:user.email},process.env.JWT_SECRET as string,{
-        expiresIn:'1d'
-      })
-
-      return res.status(200).json({token:jwtToken, user:{
-        id:user.id,
-        name:user.name,
-        email:user.email,
-        avatar_url:user.avatar_url
-      }})
-
-
-  } catch (error) {
-    console.error("Google Auth Error",error)
-    return res.status(500).json({error:"Google authentication failed"})
+    return res.status(200).json({
+      token: jwtToken,
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        avatar_url: user.avatar_url,
+      },
+    });
+  } catch (error: any) {
+    console.error("Google Auth Error details:", error?.message || error);
+    return res.status(500).json({
+      error: error?.message || "Google authentication failed",
+    });
   }
-
-}
+};
 
 
 
