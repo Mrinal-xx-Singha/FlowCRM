@@ -1,7 +1,7 @@
 "use client";
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { customerApi, jobsApi } from "@/lib/api";
 import { ArrowLeft, Mail, Phone, StickyNote, UserCircle, Briefcase, Calendar, MapPin, Building, Globe, Clock } from "lucide-react";
 
@@ -10,8 +10,14 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { AiEmailModal } from '@/components/ai/ai-email-modal';
+import { Textarea } from '@/components/ui/textarea';
+import { toast } from "sonner"
+import { Check, Loader2 } from 'lucide-react';
 
 const CustomerDetailsPage = () => {
+  const [notes, setNotes] = useState("")
+  const queryClient = useQueryClient()
+
   const params = useParams();
   const router = useRouter();
   const customerId = params.id as string;
@@ -27,9 +33,40 @@ const CustomerDetailsPage = () => {
     queryFn: () => jobsApi.getJobs(),
   });
 
+
   const customerData = customer?.customer;
   const linkedJobs = jobData?.jobs?.filter((j: any) => j.customer_id === Number(customerId)) || [];
 
+  // Sync local notes state whenever server customer data is loaded
+
+  useEffect(() => {
+    if (customerData?.notes !== undefined) {
+      setNotes(customerData.notes || "")
+    }
+
+  }, [customerData?.notes])
+
+  // Mutation to save notes in the background 
+  const updateNotesMutation = useMutation({
+    mutationFn: (newNotes: string) => customerApi.updateCustomer({ id: Number(customerId), notes: newNotes }),
+    onSuccess: () => {
+      // Refresh customer cache so other tabs have the updated notes
+      queryClient.invalidateQueries({ queryKey: ["customer", customerId] })
+      toast.success("Notes saved!")
+    },
+    onError: () => {
+      toast.error("Failed to save notes.")
+    }
+  })
+
+  // Fires automatically when user clicks away from the textarea
+  const handleNotesBlur = () => {
+    const currentSavedNotes = customerData?.notes || ""
+    // Only fire if the text actually changes
+    if (notes !== currentSavedNotes) {
+      updateNotesMutation.mutate(notes)
+    }
+  }
   if (isLoading) {
     return (
       <div className="flex flex-col gap-6 animate-pulse w-full max-w-4xl">
@@ -172,13 +209,56 @@ const CustomerDetailsPage = () => {
         <TabsContent value="notes" className="mt-6">
           <Card className="shadow-none border bg-slate-50/50 dark:bg-zinc-900/50">
             <CardContent className="pt-6">
-              <div className="flex items-start gap-4">
-                <div className="w-full">
-                  <h3 className="text-sm font-semibold mb-2">Executive Notes</h3>
-                  <div className="text-sm text-foreground bg-white dark:bg-zinc-950 p-5 rounded-xl border min-h-32 whitespace-pre-wrap leading-relaxed">
-                    {customerData.notes || <span className="text-muted-foreground italic">No notes recorded.</span>}
+              <div className="flex items-start gap-3">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3
+                      className='text-sm font-semibold '
+                    >Executive Notes</h3>
+                    <p
+                      className='text-xs text-muted-foreground'
+                    >Client preferences, deal requirements, and meetig takeaways</p>
                   </div>
+                  {/* Dynamic save status badge */}
+                  <div className='flex items-center gap-1.5 text-xs text-muted-foreground'>
+                    {updateNotesMutation.isPending ? (
+                      <>
+                        <Loader2
+                          className='h-3.5 w-3.5 animate-spin text-primary'
+                        />
+                        <span
+                          className='text-primary font-medium'
+                        >Saving...</span>
+                      </>
+
+                    ) : updateNotesMutation.isSuccess ? (
+                      <>
+                        <Check
+                          className='h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400'
+                        />
+                        <span
+                          className='text-emerald-600 dark:text-emerald-400 font-medium'
+                        >Saved</span>
+                      </>
+                    ) : (
+                      <span
+                        className='text-[11px] text-muted-foreground/70'
+                      >
+                        Auto-saves on blur
+                      </span>
+                    )}
+
+                  </div>
+
                 </div>
+                {/* Auto saving Textarea */}
+                <Textarea
+                  value={notes}
+                  onChange={(e) => setNotes(e.target.value)}
+                  onBlur={handleNotesBlur}
+                  placeholder='Click here to type notes for this customer... (saves automatically when you click outside)'
+                  className='min-h-48 text-sm leading-relaxed p-4 bg-white dark:bg-zinc-950 border rounded-xl focus-visible:ring-1 focus-visible:ring-primary'
+                />
               </div>
             </CardContent>
           </Card>
