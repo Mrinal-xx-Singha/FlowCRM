@@ -58,6 +58,7 @@
 - **Optimistic UI Updates**: State changes reflect immediately in the interface and revert automatically if backend synchronization encounters an error.
 - **Deal Value Tracking (₹ INR)**: Track flat Indian Rupee deal sizes per job, dynamically aggregated into pipeline revenue charts.
 - 300ms debounced live search querying titles and customer relationships simultaneously.
+- Added a real-time column revenue totals in INR and it gets updated optimistically.
 
 ### 4. ⏰ Concurrency-Safe Automated Reminders & Cron
 - Scheduled client follow-up alerts with future date enforcement (`remind_at > NOW()`).
