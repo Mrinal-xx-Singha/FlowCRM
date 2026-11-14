@@ -209,7 +209,7 @@ const CustomerDetailsPage = () => {
         <TabsContent value="notes" className="mt-6">
           <Card className="shadow-none border bg-slate-50/50 dark:bg-zinc-900/50">
             <CardContent className="pt-6">
-              <div className="flex items-start gap-3">
+              <div className="flex flex-col gap-3">
                 <div className="flex items-center justify-between">
                   <div>
                     <h3
