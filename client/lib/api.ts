@@ -120,6 +120,10 @@ export const dashboardApi = {
     const response = await api.get("/api/dashboard/upcoming-reminders");
     return response.data;
   },
+  seedDemo:async()=>{
+    const response = await api.post("/api/dashboard/seed")
+    return response.data
+  }
 };
 
 export const reminderApi = {
